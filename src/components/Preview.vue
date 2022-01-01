@@ -17,8 +17,8 @@
   
   import {DesignSide} from '../types/design';
 
-  import defaultT0 from '../assets/tex1.jpeg';
-  import defaultT1 from '../assets/image.png';
+  import defaultT0 from '../assets/images/tex1.jpeg';
+  import defaultT1 from '../assets/images/image.png';
 
   const props = defineProps<{
     designSide: DesignSide;

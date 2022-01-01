@@ -7,7 +7,7 @@ import {Design, DesignUnit} from './types/design'
 import Editor from './components/Editor.vue'
 import Preview from './components/Preview.vue'
 
-import sampleDesignUrl from './assets/box1.png'
+import sampleDesignUrl from './assets/images/box1.png'
 
 const WEBGL_AVAILABLE = WEBGL.isWebGLAvailable()
 

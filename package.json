@@ -4,11 +4,18 @@
   "description": "A simple box design app",
   "author": "Lam Nhan",
   "homepage": "https://boxr.lamnhan.com",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },
+  "keywords": [
+    "box",
+    "design",
+    "vue",
+    "threejs"
+  ],
   "dependencies": {
     "three": "^0.136.0",
     "vue": "^3.2.25"
