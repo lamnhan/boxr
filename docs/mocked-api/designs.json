@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "slug": "sample-design-01",
+    "title": "Sample design 01",
+    "created_at": "2020-01-01T00:00:00.000Z",
+    "updated_at": "2020-01-01T00:00:00.000Z",
+    "category_id": "rectangular",
+    "template_id": "rectangular-template-001",
+    "material_id": "cardboard",
+    "design_data": {}
+  }
+]

@@ -1,0 +1,5 @@
+[
+  {"id": "syl-01", "title": "10 x 10cm", "price": 0, "radius": 0.1, "height": 0.1},
+  {"id": "syl-02", "title": "10 x 20cm", "price": 0, "radius": 0.1, "height": 0.2},
+  {"id": "syl-03", "title": "20 x 10cm", "price": 0, "radius": 0.2, "height": 0.1}
+]

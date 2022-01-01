@@ -1,0 +1,5 @@
+[
+  {"id": "tri-01", "title": "10 x 10 x 10cm", "price": 0, "lengthA": 0.1, "lengthB": 0.1, "height": 0.1},
+  {"id": "tri-02", "title": "20 x 20 x 10cm", "price": 0, "lengthA": 0.2, "lengthB": 0.2, "height": 0.1},
+  {"id": "tri-03", "title": "20 x 10 x 10cm", "price": 0, "lengthA": 0.2, "lengthB": 0.1, "height": 0.1}
+]

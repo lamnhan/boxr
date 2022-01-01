@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "slug": "cardboard",
+    "title": "Corrugated cardboard",
+    "offset_price": 0,
+    "thickness": 0.1,
+    "textures": {
+      "front": {
+        "title": "Front",
+        "colors": ["#EEC373", "#FFAB76", "#FFF5E1"]
+      },
+      "back": {
+        "title": "Back",
+        "colors": ["#EEEEEE"]
+      }
+    }
+  },
+  {
+    "id": 2,
+    "slug": "paper",
+    "title": "Thick paper",
+    "offset_price": 100,
+    "thickness": 0.05,
+    "textures": {
+      "front": {
+        "title": "Front",
+        "colors": ["#FEFEFE", "#A6CF98", "#B958A5", "#7267CB", "#2C394B"],
+        "customizable": true
+      },
+      "back": {
+        "title": "Back",
+        "colors": ["#FEFEFE", "#2C394B", "#F9E4C8"],
+        "customizable": true
+      }
+    }
+  },
+  {
+    "id": 3,
+    "slug": "plastic",
+    "title": "Polyethylene plastic",
+    "offset_price": 2000,
+    "thickness": 0,
+    "textures": {
+      "front": {
+        "colors": ["#185ADB", "#34BE82", "#DA0037"]
+      }
+    }
+  }
+]

@@ -17,10 +17,14 @@
     "threejs"
   ],
   "dependencies": {
+    "fabric": "^4.6.0",
     "three": "^0.136.0",
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@types/fabric": "^4.5.6",
     "@types/three": "^0.135.0",
     "@vitejs/plugin-vue": "^2.0.0",
     "sass": "^1.45.1",

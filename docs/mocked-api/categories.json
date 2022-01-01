@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "slug": "rectangular",
+    "title": "Rectangular",
+    "description": "Rectangular box of all sizes",
+    "thumbnail": "/icons/rectangular.svg",
+    "image": "/images/rectangular.jpg"
+  },
+  {
+    "id": 2,
+    "slug": "rectangular-lid",
+    "title": "Rectangular with Lid",
+    "description": "Rectangular box with lid of all sizes",
+    "thumbnail": "/icons/rectangular-lid.svg",
+    "image": "/images/rectangular-lid.jpg"
+  },
+  {
+    "id": 3,
+    "slug": "cylindrical",
+    "title": "Cylindrical",
+    "description": "Cylindrical box of all sizes",
+    "thumbnail": "/icons/cylindrical.svg",
+    "image": "/images/cylindrical.jpg"
+  },
+  {
+    "id": 4,
+    "slug": "triangular",
+    "title": "Triangular",
+    "description": "Triangular box of all sizes",
+    "thumbnail": "/icons/triangular.svg",
+    "image": "/images/triangular.jpg"
+  },
+  {
+    "id": 5,
+    "slug": "hearted",
+    "title": "Hearted",
+    "description": "Hearted box of all sizes",
+    "thumbnail": "/icons/hearted.svg",
+    "image": "/images/hearted.jpg"
+  }
+]

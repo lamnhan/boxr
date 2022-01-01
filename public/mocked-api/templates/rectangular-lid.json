@@ -1,0 +1,5 @@
+[
+  {"id": "rec-lid-01", "title": "10 x 10 x 10cm", "price": 0, "width": 0.1, "length": 0.1, "height": 0.1},
+  {"id": "rec-lid-02", "title": "10 x 20 x 10cm", "price": 0, "width": 0.1, "length": 0.2, "height": 0.1},
+  {"id": "rec-lid-03", "title": "20 x 10 x 10cm", "price": 0, "width": 0.2, "length": 0.1, "height": 0.1}
+]
