@@ -17,7 +17,7 @@ const mode = ref<'design' | 'preview'>('design')
 const unit = ref(0)
 
 function canvasChanged(value: Design2D) {
-  console.log('canvasChanged ->', value)
+  // TODO: handle design changes here
 }
 
 store.dispatch(

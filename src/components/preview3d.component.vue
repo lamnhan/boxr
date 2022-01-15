@@ -71,7 +71,7 @@ onUpdated(() => {
     <div class="mode-chooser">
       <button @click="mode='closed'" :style="{background: mode === 'closed' ? '#ddd' : '#fff'}">Closed</button>
       <button @click="mode='opened'" :style="{background: mode === 'opened' ? '#ddd' : '#fff'}">Opened</button>
-      <button @click="mode='dissected'" :style="{background: mode === 'dissected' ? '#ddd' : '#fff'}">Dissected</button>
+      <!-- <button @click="mode='dissected'" :style="{background: mode === 'dissected' ? '#ddd' : '#fff'}">Dissected</button> -->
     </div>
   </div>
 </template>
@@ -90,7 +90,7 @@ onUpdated(() => {
     position: absolute;
     top: -45px;
     left: 50%;
-    margin-left: -180px;
+    margin-left: -120px;
 
     button {
       background: #fff;

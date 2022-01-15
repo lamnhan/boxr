@@ -10,6 +10,7 @@ import {
   Mesh,
   Color,
   MathUtils,
+  AxesHelper
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -52,17 +53,12 @@ export class Preview3D {
     this.controls.minDistance = viewPosition;
     this.controls.maxDistance = viewPosition * 3;
     container.appendChild(this.renderer.domElement)
+    this.scene.add(new AxesHelper(10))
     return this as Preview3D;
   }
 
   clear() {
-    // for (let i = 0; i < this.scene.children.length; i++) {
-    //   const child = this.scene.children[i];
-    //   if (child.type !== 'AmbientLight') {
-    //     this.scene.remove(child);
-    //   }
-    // }
-    while(this.scene.children.length > 0){ 
+    while (this.scene.children.length > 0) {
       this.scene.remove(this.scene.children[0]);
     }
     return this as Preview3D;
@@ -71,7 +67,7 @@ export class Preview3D {
   renderObject(placement: PlacementMode, {outsideParts, insideParts, outsideTextures, insideTextures}: RenderData) {
     this.scene.add(this.light);
     this.renderParts(placement, outsideParts, outsideTextures);
-    // this.renderParts(placement, insideParts, insideTextures);
+    this.renderParts(placement, insideParts, insideTextures);
     return this as Preview3D;
   }
 
@@ -104,10 +100,10 @@ export class Preview3D {
           )
       }
       // set position/rotation
-      mesh.position.set(pX, pY, pZ)
       if (rX) mesh.rotateX(MathUtils.degToRad(rX))
       if (rY) mesh.rotateY(MathUtils.degToRad(rY))
       if (rZ) mesh.rotateZ(MathUtils.degToRad(rZ))
+      mesh.position.set(pX, pY, pZ)
       // render
       this.scene.add(mesh);
     })
