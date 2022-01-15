@@ -1,6 +1,6 @@
 import {fabric} from 'fabric'
 
-import {TemplatePart} from '../types/template.type';
+import {TemplateUnit, TemplatePart} from '../types/template.type';
 import {DesignData} from '../types/design.type';
 import {TextureName} from '../types/material.type';
 
@@ -10,6 +10,10 @@ import {Scale} from '../scale'
 export class Design2D {
   scale!: Scale;
   canvas!: fabric.Canvas;
+
+  side!: TextureName;
+  designData!: DesignData;
+  unit!: TemplateUnit;
 
   constructor() {}
 
@@ -38,22 +42,44 @@ export class Design2D {
     return this.canvas.toJSON();
   }
 
-  renderBackdrop(side: string, designData: DesignData, parts: Record<string, TemplatePart>) {
-    const sideMap: Record<string, TextureName> = {inside: 'back', outside: 'front'}
-    Object.keys(parts).forEach(id => {
-      const {x, y, w, h} = parts[id]
+  renderDesign(side: TextureName, designData: DesignData, unit: TemplateUnit) {
+    this.side = side;
+    this.designData = designData;
+    this.unit = unit;
+    this.renderBackdrop();
+    return this as Design2D;
+  }
+
+  getDataUrls() {
+    return this.getParts().reduce(
+      (result, part) => {
+        result[part.id] = this.sliceImage(part);
+        return result;
+      },
+      {} as Record<string, string>
+    )
+  }
+
+  private getParts() {
+    return this.side === 'front'
+      ? this.unit.parts
+      : this.unit.parts.map(item => ({ ...item, y: this.unit.width_2d - item.y - item.w }))
+  }
+
+  private renderBackdrop() {
+    this.getParts().forEach(item => {
+      const {id, x, y, w, h} = item;
       const width = this.scale.getPixels(w)
       const height = this.scale.getPixels(h)
       const top = this.scale.getPixels(x)
       const left = this.scale.getPixels(y)
-      const fill = designData.colors[sideMap[side] || sideMap['outside']]
-      const part = new fabric.Rect({ width, height, top, left, fill, selectable: false })
-      this.canvas.add(part)
+      const fill = this.designData.colors[this.side] || this.designData.colors['front']
+      const rect = new fabric.Rect({ width, height, top, left, fill, selectable: false })
+      this.canvas.add(rect)
       // helper text
-      const helperText = new fabric.Text(id, { left, top, fontSize: 30, selectable: false })
-      this.canvas.add(helperText)
+      const txt = new fabric.Text(this.side === 'front' ? `${id}` : `-${id}`, { left, top, fontSize: 30, selectable: false })
+      this.canvas.add(txt)
     })
-    return this as Design2D;
   }
 
   private buildCanvas(id?: string, changedHandler?: Function) {
@@ -69,17 +95,6 @@ export class Design2D {
     this.canvas.on('object:modified', () => onChanged(this))
     // done
     return this as Design2D;
-  }
-
-  getDataUrlsByParts(parts: Record<string, TemplatePart>) {
-    const dataUrls = Object.keys(parts).reduce(
-      (result, id) => {
-        result[id] = this.sliceImage(parts[id]);
-        return result;
-      },
-      {} as Record<string, string>
-    )
-    return dataUrls;
   }
 
   private sliceImage(partData: TemplatePart) {

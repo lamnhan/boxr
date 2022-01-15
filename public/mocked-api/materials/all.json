@@ -4,7 +4,7 @@
     "slug": "cardboard",
     "title": "Corrugated cardboard",
     "offset_price": 0,
-    "thickness": 0.1,
+    "thickness": 0.01,
     "textures": {
       "front": {
         "title": "Front",
@@ -21,7 +21,7 @@
     "slug": "paper",
     "title": "Thick paper",
     "offset_price": 100,
-    "thickness": 0.05,
+    "thickness": 0.001,
     "textures": {
       "front": {
         "title": "Front",

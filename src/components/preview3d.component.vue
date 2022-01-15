@@ -30,36 +30,33 @@ function renderCanvas() {
     .animate();
 }
 
-function renderObject() {
-  const outsideParts = currentUnit.value['outside'].parts;
+function renderDesign() {
   const outsideTextures = new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
     .createCanvas()
-    .renderBackdrop('outside', props.design.design_data, outsideParts)
-    .getDataUrlsByParts(outsideParts)
-  const insideParts = currentUnit.value['inside'].parts;
+    .renderDesign('front', props.design.design_data, currentUnit.value)
+    .getDataUrls();
   const insideTextures = new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
     .createCanvas()
-    .renderBackdrop('inside', props.design.design_data, insideParts)
-    .getDataUrlsByParts(insideParts)
+    .renderDesign('back', props.design.design_data, currentUnit.value)
+    .getDataUrls();
   preview3D
-    .renderObject(mode.value, {outsideParts, outsideTextures, insideParts, insideTextures});
+    .renderDesign(mode.value, currentUnit.value, {outsideTextures, insideTextures});
 }
 
 function changeMode(newMode: PlacementMode) {
   mode.value = newMode;
-  preview3D.clear();
-  renderObject();
 }
 
 onMounted(() => {
   renderCanvas();
-  renderObject();
+  renderDesign();
 })
 
 onUpdated(() => {
-  changeMode(mode.value);
+  preview3D.clear();
+  renderDesign();
 })
 </script>
 
@@ -69,9 +66,8 @@ onUpdated(() => {
   </div>
   <div class="footer">
     <div class="mode-chooser">
-      <button @click="mode='closed'" :style="{background: mode === 'closed' ? '#ddd' : '#fff'}">Closed</button>
-      <button @click="mode='opened'" :style="{background: mode === 'opened' ? '#ddd' : '#fff'}">Opened</button>
-      <!-- <button @click="mode='dissected'" :style="{background: mode === 'dissected' ? '#ddd' : '#fff'}">Dissected</button> -->
+      <button @click="changeMode('closed')" :style="{background: mode === 'closed' ? '#ddd' : '#fff'}">Closed</button>
+      <button @click="changeMode('opened')" :style="{background: mode === 'opened' ? '#ddd' : '#fff'}">Opened</button>
     </div>
   </div>
 </template>

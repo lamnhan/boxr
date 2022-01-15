@@ -2,7 +2,7 @@
 import {ref, computed, defineProps, defineEmits, onMounted, onUpdated} from 'vue'
 
 import {Design, EditingData} from '../types/design.type'
-import {TemplateSideName} from '../types/template.type'
+import {TextureName} from '../types/material.type'
 
 import {Design2D} from '../objects/design2d.object';
 
@@ -14,12 +14,10 @@ const props = defineProps<{
 }>();
 
 // ref
-const side = ref<TemplateSideName>('outside')
+const side = ref<TextureName>('front')
 
 // computed
 const currentUnit = computed(() => props.data.template.spec.units[props.unit])
-const currentSide = computed(() => currentUnit.value[side.value])
-const currentParts = computed(() => currentSide.value.parts)
 
 // outputs
 const emits = defineEmits<{
@@ -30,22 +28,30 @@ const emits = defineEmits<{
 let design2D!: Design2D
 
 // methods
-function render() {
+function renderCanvas() {
   design2D = new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
-    .renderCanvas('canvas-2d', (design2D: Design2D) => emits('canvasChanged', design2D))
-    .renderBackdrop(side.value, props.design.design_data, currentParts.value)
+    .renderCanvas('canvas-2d', (design2D: Design2D) => emits('canvasChanged', design2D));
+}
+
+function renderDesign() {
+  design2D.renderDesign(side.value, props.design.design_data, currentUnit.value)
+}
+
+function changeSide(newSide: TextureName) {
+  side.value = newSide;
 }
 
 // init
 onMounted(() => {
-  render()
+  renderCanvas()
+  renderDesign()
 })
 
 // updated
 onUpdated(() => {
   design2D.clear()
-  render()
+  renderDesign()
 })
 </script>
 
@@ -57,8 +63,8 @@ onUpdated(() => {
   </div>
   <div class="footer">
     <div class="side-chooser">
-      <button @click="side='outside'" :style="{background: side === 'outside' ? '#ddd' : '#fff'}">Outside</button>
-      <button @click="side='inside'" :style="{background: side === 'inside' ? '#ddd' : '#fff'}">Inside</button>
+      <button @click="changeSide('front')" :style="{background: side === 'front' ? '#ddd' : '#fff'}">Outside</button>
+      <button @click="changeSide('back')" :style="{background: side === 'back' ? '#ddd' : '#fff'}">Inside</button>
     </div>
   </div>
 </template>

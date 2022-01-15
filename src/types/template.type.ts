@@ -21,29 +21,19 @@ export interface TemplateUnit {
   height_2d: number;
   width_3d: number;
   height_3d: number;
-  cpc: Placement;
-  cpd: Placement;
-  cpo: Placement;
-  outside: TemplateSide;
-  inside: TemplateSide;
-}
-
-export interface TemplateSide {
-  parts: Record<string, TemplatePart>;
+  parts: TemplatePart[];
 }
 
 export interface TemplatePart {
+  id: number;
   x: number;
   y: number;
   w: number;
   h: number;
   c?: string;
   pc?: Placement; // closed
-  pd?: Placement; // dissected
   po?: Placement; // opened
 }
-
-export type TemplateSideName = 'inside' | 'outside';
 
 export interface Placement {
   g: Geometry;
@@ -57,7 +47,7 @@ export interface Placement {
   }
 }
 
-export type PlacementMode = 'closed' | 'dissected' | 'opened';
+export type PlacementMode = 'closed' | 'opened';
 
 export type Geometry =
   | 'unit' // coordinated placement only

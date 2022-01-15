@@ -5,20 +5,19 @@ import {
   PerspectiveCamera,
   AmbientLight,
   PlaneGeometry,
+  Mesh,
+  Group,
+  Color,
   MeshLambertMaterial,
   TextureLoader,
-  Mesh,
-  Color,
   MathUtils,
   AxesHelper
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-import {TemplatePart, PlacementMode} from '../types/template.type';
+import {TemplatePart, PlacementMode, TemplateUnit} from '../types/template.type';
 
-export interface RenderData {
-  outsideParts: Record<string, TemplatePart>;
-  insideParts: Record<string, TemplatePart>;
+export interface TextureData {
   outsideTextures: Record<string, string>;
   insideTextures: Record<string, string>;
 }
@@ -64,10 +63,9 @@ export class Preview3D {
     return this as Preview3D;
   }
   
-  renderObject(placement: PlacementMode, {outsideParts, insideParts, outsideTextures, insideTextures}: RenderData) {
+  renderDesign(mode: PlacementMode, unit: TemplateUnit, textureData: TextureData) {
     this.scene.add(this.light);
-    this.renderParts(placement, outsideParts, outsideTextures);
-    this.renderParts(placement, insideParts, insideTextures);
+    this.renderParts(mode, unit.parts, textureData);
     return this as Preview3D;
   }
 
@@ -78,34 +76,41 @@ export class Preview3D {
     return this as Preview3D;
   }
 
-  private renderParts(placement: PlacementMode, parts: Record<string, TemplatePart>, textures: Record<string, string>) {
-    const placementMap: Record<string, 'pc' | 'po' | 'pd'> = {closed: 'pc', opened: 'po', dissected: 'pd'};
-    Object.keys(parts).forEach(id => {
-      const part = parts[id];
-      const {w, h} = part;
-      const placementData = part[placementMap[placement]];
+  private renderParts(mode: PlacementMode, parts: TemplatePart[], {outsideTextures, insideTextures}: TextureData) {
+    const placementMap: Record<string, 'pc' | 'po'> = {closed: 'pc', opened: 'po'};
+    parts.forEach(item => {
+      const {id, w, h} = item;
+      const placementData = item[placementMap[mode]];
       if (!placementData) return; // no pleacement
       const {g, x: pX, y: pY, z: pZ, r: {x: rX, y: rY, z: rZ} = {}} = placementData;
-      const textureUrl = textures[id]
-      // load texture
-      const texture = new TextureLoader().load(textureUrl);
+      const outsideTextureUrl = outsideTextures[id]
+      const insideTextureUrl = insideTextures[id]
+      // load textures
+      const outsideTexture = new TextureLoader().load(outsideTextureUrl);
+      const insideTexture = new TextureLoader().load(insideTextureUrl);
       // build shape
-      let mesh: Mesh;
+      const group = new Group();
       switch (g) {
         case 'rectangle':
         default:
-          mesh = new Mesh(
+          const outsideMesh = new Mesh(
             new PlaneGeometry(w, h),
-            new MeshLambertMaterial({ map: texture })
+            new MeshLambertMaterial({ map: outsideTexture })
           )
+          const insideMesh = new Mesh(
+            new PlaneGeometry(w, h),
+            new MeshLambertMaterial({ map: insideTexture })
+          )
+          insideMesh.rotateY(Math.PI);
+          group.add(outsideMesh, insideMesh);
       }
       // set position/rotation
-      if (rX) mesh.rotateX(MathUtils.degToRad(rX))
-      if (rY) mesh.rotateY(MathUtils.degToRad(rY))
-      if (rZ) mesh.rotateZ(MathUtils.degToRad(rZ))
-      mesh.position.set(pX, pY, pZ)
+      if (rX) group.rotateX(MathUtils.degToRad(rX))
+      if (rY) group.rotateY(MathUtils.degToRad(rY))
+      if (rZ) group.rotateZ(MathUtils.degToRad(rZ))
+      group.position.set(pX, pY, pZ)
       // render
-      this.scene.add(mesh);
+      this.scene.add(group);
     })
   }
 
