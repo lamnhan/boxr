@@ -7,7 +7,6 @@ import Preview3D from '../components/preview3d.component.vue'
 import {router} from '../router';
 import {store} from '../store';
 
-
 const design = computed(() => store.state.editingDesign)
 const data = computed(() => store.state.editingData)
 

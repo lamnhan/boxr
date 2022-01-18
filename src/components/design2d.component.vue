@@ -18,7 +18,7 @@ const props = defineProps<{
 
 // ref
 const side = ref<DesignSide>('front')
-
+const lastSaved = ref<Date>(new Date());
 const showSubmenu = ref<Record<string, boolean>>({})
 
 // computed
@@ -35,22 +35,16 @@ let design2D!: Design2D
 const sampleShapes = [recycleSymbol, upSymbol, drySymbol];
 
 // helpers
-function buildDataForDesignChanged(data: any) {
-  return { side: side.value, data }
+function emitDesignChanged(data: any) {
+  lastSaved.value = new Date();
+  emits('designChanged', { side: side.value, data })
 }
 
 // methods
 function renderCanvas() {
   design2D = new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
-    .renderCanvas(
-      'canvas-2d',
-      (design2D: Design2D) =>
-        emits(
-          'designChanged',
-          buildDataForDesignChanged({ canvasJSON: JSON.stringify(design2D.toJSON()) })
-        )
-    );
+    .renderCanvas('canvas-2d', (design2D: Design2D) => emitDesignChanged({ canvasJSON: JSON.stringify(design2D.toJSON()) }));
 }
 
 function renderDesign() {
@@ -88,14 +82,14 @@ function uploadImage(e: any) {
 
 function toggleBackdrop(e: any) {
   const showBackdrop = e.target.checked;
-  emits('designChanged', buildDataForDesignChanged({ showBackdrop }));
   design2D.toggleBackdrop(showBackdrop);
+  emitDesignChanged({ showBackdrop });
 }
 
 function toggleNumbering(e: any) {
   const showNumbering = e.target.checked;
-  emits('designChanged', buildDataForDesignChanged({ showNumbering }));
   design2D.toggleNumbering(showNumbering);
+  emitDesignChanged({ showNumbering });
 }
 
 function toggleSubmenu(name: string) {
@@ -162,6 +156,9 @@ watch(side, update)
     <div class="side-chooser">
       <button @click="changeSide('front')" :style="{background: side === 'front' ? '#ddd' : '#fff'}">Outside</button>
       <button @click="changeSide('back')" :style="{background: side === 'back' ? '#ddd' : '#fff'}">Inside</button>
+    </div>
+    <div class="left">
+      <span>Last saved: </span><strong>{{ lastSaved }}</strong>
     </div>
   </div>
 </template>
@@ -351,6 +348,11 @@ watch(side, update)
         border-radius: 0 5px 5px 0;
       }
     }
+  }
+
+  .left {
+    font-size: 10px;
+    padding: 5px 10px;
   }
 }
 
