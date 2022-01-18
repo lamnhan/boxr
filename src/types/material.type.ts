@@ -22,5 +22,3 @@ export interface Texture {
     mode: string;
   };
 }
-
-export type TextureName = keyof MaterialTextures;

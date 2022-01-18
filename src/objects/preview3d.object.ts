@@ -10,8 +10,7 @@ import {
   Color,
   MeshLambertMaterial,
   TextureLoader,
-  MathUtils,
-  AxesHelper
+  MathUtils
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -52,7 +51,6 @@ export class Preview3D {
     this.controls.minDistance = viewPosition;
     this.controls.maxDistance = viewPosition * 3;
     container.appendChild(this.renderer.domElement)
-    this.scene.add(new AxesHelper(10))
     return this as Preview3D;
   }
 

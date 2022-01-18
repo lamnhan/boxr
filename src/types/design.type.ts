@@ -1,6 +1,6 @@
 import {Category} from './category.type'
 import {Template} from './template.type'
-import {Material, TextureName} from './material.type';
+import {Material} from './material.type';
 
 export interface Design {
   id: number;
@@ -15,9 +15,15 @@ export interface Design {
 }
 
 export interface DesignData {
-  colors: {
-    [key in TextureName]: string;
-  };
+  front: DesignDataBySide;
+  back: DesignDataBySide;
+}
+
+export interface DesignDataBySide {
+  showBackdrop: boolean;
+  showNumbering: boolean;
+  color: string;
+  canvasJSON: string;
 }
 
 export interface EditingData {
@@ -25,3 +31,5 @@ export interface EditingData {
   template: Template;
   material: Material
 }
+
+export type DesignSide = keyof DesignData;

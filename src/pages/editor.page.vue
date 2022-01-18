@@ -4,8 +4,6 @@ import {ref, computed} from 'vue';
 import Editor2D from '../components/design2d.component.vue'
 import Preview3D from '../components/preview3d.component.vue'
 
-import {Design2D} from '../objects/design2d.object';
-
 import {router} from '../router';
 import {store} from '../store';
 
@@ -15,10 +13,6 @@ const data = computed(() => store.state.editingData)
 
 const mode = ref<'design' | 'preview'>('design')
 const unit = ref(0)
-
-function canvasChanged(value: Design2D) {
-  // TODO: handle design changes here
-}
 
 store.dispatch(
   'loadEditingData',
@@ -47,11 +41,11 @@ store.dispatch(
 
     <div class="body">
       <div class="design-view" :style="{zIndex: mode === 'design' ? 1 : -1}">
-        <Editor2D 
+        <Editor2D
           :design="design"
           :data="data"
           :unit="unit"
-          @canvas-changed="canvasChanged($event)"
+          @design-changed="store.dispatch('updateDesignData', $event)"
         ></Editor2D>
       </div>
       <div class="preview-view" :style="{zIndex: mode === 'preview' ? 1 : -1}">

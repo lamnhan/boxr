@@ -3,8 +3,8 @@ import {ref, computed} from 'vue';
 
 import {Category} from '../types/category.type';
 import {Template} from '../types/template.type';
-import {Material, Texture, TextureName} from '../types/material.type';
-import {Design} from '../types/design.type';
+import {Material, Texture} from '../types/material.type';
+import {Design, DesignSide} from '../types/design.type';
 
 import {router} from '../router';
 import {store} from '../store';
@@ -13,7 +13,7 @@ const tab = ref('blank')
 const activeCategory = ref<null | Category>(null)
 const activeTemplate = ref<null | Template>(null)
 const activeMaterial = ref<null | Material>(null)
-const activeColors = ref<null | Record<TextureName, string>>(null)
+const activeColors = ref<null | Record<any, string>>(null)
 
 const categories = computed(() => store.state.categories)
 const materialRecord = computed(() => store.state.materialRecord)
@@ -35,7 +35,18 @@ function editFromTemplate() {
       category_id: activeCategory.value.id,
       material_id: activeMaterial.value.id,
       design_data: {
-        colors: activeColors.value,
+        front: {
+          showBackdrop: true,
+          showNumbering: true,
+          color: activeColors.value['front'],
+          canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
+        },
+        back: {
+          showBackdrop: true,
+          showNumbering: true,
+          color: activeColors.value['back'] || activeColors.value['front'],
+          canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
+        }
       },
     };
   store.dispatch('createDesign', design).then(() => editFromDesign(design));
@@ -64,17 +75,17 @@ function selectMaterial(material: Material) {
   // set default color
   activeColors.value = Object.keys(activeMaterial.value.textures).reduce(
     (result, name) => {
-      result[name as TextureName] = ((activeMaterial.value as Material)
-        .textures[name as TextureName] as Texture)
+      result[name as DesignSide] = ((activeMaterial.value as Material)
+        .textures[name as DesignSide] as Texture)
         .colors[0]
       return result
     },
-    {} as Record<TextureName, string>
+    {} as Record<any, string>
   )
 }
 
-function selectColor(name: TextureName, color: string) {
-  activeColors.value = { ...activeColors.value, [name]: color } as Record<TextureName, string>
+function selectColor(name: any, color: string) {
+  activeColors.value = { ...activeColors.value, [name]: color } as Record<any, string>
 }
 
 function chooseCustomColor() {

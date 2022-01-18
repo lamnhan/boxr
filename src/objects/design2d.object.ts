@@ -1,8 +1,7 @@
 import {fabric} from 'fabric'
 
 import {TemplateUnit, TemplatePart} from '../types/template.type';
-import {DesignData} from '../types/design.type';
-import {TextureName} from '../types/material.type';
+import {DesignDataBySide, DesignSide} from '../types/design.type';
 
 import {debounce} from '../helpers'
 import {Scale} from '../scale'
@@ -10,10 +9,16 @@ import {Scale} from '../scale'
 export class Design2D {
   scale!: Scale;
   canvas!: fabric.Canvas;
+  silentCanvas = false;
+  skipChanged = false;
 
-  side!: TextureName;
-  designData!: DesignData;
+  side!: DesignSide;
+  data!: DesignDataBySide;
   unit!: TemplateUnit;
+  parts!: TemplatePart[];
+
+  backdropObjects: fabric.Object[] = [];
+  numberingObjects: fabric.Object[] = [];
 
   constructor() {}
 
@@ -26,6 +31,7 @@ export class Design2D {
   }
 
   createCanvas() {
+    this.silentCanvas = true;
     return this.buildCanvas();
   }
   
@@ -34,6 +40,7 @@ export class Design2D {
   }
 
   clear() {
+    this.skipChanged = true;
     this.canvas.clear();
     return this as Design2D;
   }
@@ -42,16 +49,25 @@ export class Design2D {
     return this.canvas.toJSON();
   }
 
-  renderDesign(side: TextureName, designData: DesignData, unit: TemplateUnit) {
+  renderDesign(side: DesignSide, data: DesignDataBySide, unit: TemplateUnit): Promise<Design2D> {
     this.side = side;
-    this.designData = designData;
+    this.data = data;
     this.unit = unit;
-    this.renderBackdrop();
-    return this as Design2D;
+    this.parts = this.getParts();
+    // global objects
+    this.buildGlobalObjects();
+    // render design
+    return new Promise(resolve => {
+      this.canvas.loadFromJSON(this.data.canvasJSON, () => {
+        if (this.silentCanvas || data.showBackdrop) this.toggleBackdrop()
+        if (data.showNumbering) this.toggleNumbering()
+        resolve(this);
+      })
+    });
   }
 
   getDataUrls() {
-    return this.getParts().reduce(
+    return this.parts.reduce(
       (result, part) => {
         result[part.id] = this.sliceImage(part);
         return result;
@@ -60,25 +76,87 @@ export class Design2D {
     )
   }
 
+  toggleBackdrop(isShow = true) {
+    this.skipChanged = true;
+    this.data.showBackdrop = isShow;
+    this.backdropObjects.forEach(obj =>
+      isShow
+        ? this.canvas.add(obj).sendToBack(obj)
+        : this.canvas.remove(obj)
+    )
+  }
+
+  toggleNumbering(isShow = true) {
+    this.skipChanged = true;
+    this.data.showNumbering = isShow;
+    this.numberingObjects.forEach(obj =>
+        isShow
+          ? this.canvas.add(obj).bringToFront(obj)
+          : this.canvas.remove(obj)
+    )
+  }
+
+  addText() {
+    const text = new fabric.IText('Lorem ipsum', { fontSize: 32 });
+    this.canvas.add(text)
+    this.rearrangeHelpers();
+  }
+  
+  addImage(url: string) {
+    const imageEl = document.createElement('img');
+    imageEl.addEventListener('load', () => {
+      const image = new fabric.Image(imageEl);
+      this.canvas.add(image);
+      this.rearrangeHelpers();
+    })
+    imageEl.src = url;
+  }
+
   private getParts() {
     return this.side === 'front'
       ? this.unit.parts
       : this.unit.parts.map(item => ({ ...item, y: this.unit.width_2d - item.y - item.w }))
   }
 
-  private renderBackdrop() {
-    this.getParts().forEach(item => {
+  private rearrangeHelpers() {
+    if (!this.data.showNumbering) return
+    this.numberingObjects.forEach(obj => this.canvas.bringToFront(obj))
+  }
+
+  private buildGlobalObjects() {
+    this.backdropObjects = [];
+    this.numberingObjects = [];
+    this.parts.forEach(item => {
       const {id, x, y, w, h} = item;
       const width = this.scale.getPixels(w)
       const height = this.scale.getPixels(h)
       const top = this.scale.getPixels(x)
       const left = this.scale.getPixels(y)
-      const fill = this.designData.colors[this.side] || this.designData.colors['front']
-      const rect = new fabric.Rect({ width, height, top, left, fill, selectable: false })
-      this.canvas.add(rect)
-      // helper text
-      const txt = new fabric.Text(this.side === 'front' ? `${id}` : `-${id}`, { left, top, fontSize: 30, selectable: false })
-      this.canvas.add(txt)
+      // backdrop
+      const fill = this.data.color
+      const rect = new fabric.Rect({
+        width,
+        height,
+        top,
+        left,
+        fill,
+        selectable: false,
+        excludeFromExport: true
+      })
+      this.backdropObjects.push(rect)
+      // part numbering
+      const txt = new fabric.Text(
+        this.side === 'front' ? `${id}` : `-${id}`,
+        {
+          left: left + 5,
+          top: top + 5,
+          fontSize: 16,
+          fill: 'rgba(0, 0, 0, 0.5)',
+          selectable: false,
+          excludeFromExport: true
+        }
+      )
+      this.numberingObjects.push(txt)
     })
   }
 
@@ -89,7 +167,10 @@ export class Design2D {
     this.canvas.setWidth(this.scale.W)
     this.canvas.setHeight(this.scale.H)
     // changes
-    const onChanged = debounce(changedHandler || (() => undefined), 1000)
+    const onChanged = debounce((instance: Design2D) => {
+      if (!this.skipChanged && changedHandler) changedHandler(instance)
+      this.skipChanged = false;
+    }, 1000)
     this.canvas.on('object:added', () => onChanged(this))
     this.canvas.on('object:removed', () => onChanged(this))
     this.canvas.on('object:modified', () => onChanged(this))

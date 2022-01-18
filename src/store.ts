@@ -3,7 +3,7 @@ import {Store} from 'vuex';
 import {Category} from './types/category.type';
 import {Material} from './types/material.type';
 import {Template} from './types/template.type';
-import {Design, EditingData} from './types/design.type';
+import {Design, DesignDataBySide, DesignSide, EditingData} from './types/design.type';
 
 import {fetchService} from './services/fetch.service';
 
@@ -60,6 +60,11 @@ export const store = new Store({
     createDesign({state}, design: Design) {
       state.editingDesign = design;
       return new Promise(resolve => setTimeout(() => resolve(design), 300))
+    },
+    updateDesignData({state}, {side, data}: {side: DesignSide, data: DesignDataBySide}) {
+      const design = state.editingDesign as Design;
+      design.design_data[side] = { ...design.design_data[side], ...data };
+      return state.editingDesign = design;
     },
     async loadEditingData({state}, designId: number) {
       // load design

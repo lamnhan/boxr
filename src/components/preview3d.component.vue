@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, computed, defineProps, onMounted, onUpdated} from 'vue';
+import {ref, computed, defineProps, onMounted, onUpdated, watch} from 'vue';
 
 import {Design2D} from '../objects/design2d.object';
 import {Preview3D} from '../objects/preview3d.object';
@@ -30,34 +30,38 @@ function renderCanvas() {
     .animate();
 }
 
-function renderDesign() {
-  const outsideTextures = new Design2D()
+async function renderDesign() {
+  const outsideDesign2D = await new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
     .createCanvas()
-    .renderDesign('front', props.design.design_data, currentUnit.value)
-    .getDataUrls();
-  const insideTextures = new Design2D()
+    .renderDesign('front', props.design.design_data['front'], currentUnit.value);
+  const insideDesign2D = await new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
     .createCanvas()
-    .renderDesign('back', props.design.design_data, currentUnit.value)
-    .getDataUrls();
+    .renderDesign('back', props.design.design_data['back'], currentUnit.value)
+  const outsideTextures = outsideDesign2D.getDataUrls();
+  const insideTextures = insideDesign2D.getDataUrls();
   preview3D
     .renderDesign(mode.value, currentUnit.value, {outsideTextures, insideTextures});
+}
+
+function init() {
+  renderCanvas();
+  renderDesign();
+}
+
+function update() {
+  preview3D.clear();
+  renderDesign();
 }
 
 function changeMode(newMode: PlacementMode) {
   mode.value = newMode;
 }
 
-onMounted(() => {
-  renderCanvas();
-  renderDesign();
-})
-
-onUpdated(() => {
-  preview3D.clear();
-  renderDesign();
-})
+onMounted(init)
+watch(props, update)
+watch(mode, update)
 </script>
 
 <template>
