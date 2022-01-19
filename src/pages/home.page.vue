@@ -4,7 +4,7 @@ import {ref, computed} from 'vue';
 import {Category} from '../types/category.type';
 import {Template} from '../types/template.type';
 import {Material, Texture} from '../types/material.type';
-import {Design, DesignSide} from '../types/design.type';
+import {Design, DesignSide, DesignData} from '../types/design.type';
 
 import {router} from '../router';
 import {store} from '../store';
@@ -25,6 +25,26 @@ function editFromDesign(design: Design) {
 
 function editFromTemplate() {
   if (!activeCategory.value || !activeTemplate.value || !activeMaterial.value || !activeColors.value?.front) return
+  const designData = activeTemplate.value.spec.units.reduce(
+    (result, item) => {
+      result[item.id] = {
+        front: {
+          showBackdrop: true,
+          showNumbering: true,
+          color: (activeColors.value as any)['front'],
+          canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
+        },
+        back: {
+          showBackdrop: true,
+          showNumbering: true,
+          color: (activeColors.value as any)['back'] || (activeColors.value as any)['front'],
+          canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
+        }
+      }
+      return result;
+    },
+    {} as Record<string, DesignData>
+  )
   const design: Design = {
       id: Math.floor(Math.random() * 1000),
       slug: 'untitled-design',
@@ -34,20 +54,7 @@ function editFromTemplate() {
       template_id: activeTemplate.value.id,
       category_id: activeCategory.value.id,
       material_id: activeMaterial.value.id,
-      design_data: {
-        front: {
-          showBackdrop: true,
-          showNumbering: true,
-          color: activeColors.value['front'],
-          canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
-        },
-        back: {
-          showBackdrop: true,
-          showNumbering: true,
-          color: activeColors.value['back'] || activeColors.value['front'],
-          canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
-        }
-      },
+      design_data: designData,
     };
   store.dispatch('createDesign', design).then(() => editFromDesign(design));
 }

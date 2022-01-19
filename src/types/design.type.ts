@@ -11,15 +11,15 @@ export interface Design {
   category_id: number;
   template_id: number;
   material_id: number;
-  design_data: DesignData;
+  design_data: Record<string, DesignData>;
 }
 
 export interface DesignData {
-  front: DesignDataBySide;
-  back: DesignDataBySide;
+  front: DesignBySide;
+  back: DesignBySide;
 }
 
-export interface DesignDataBySide {
+export interface DesignBySide {
   showBackdrop: boolean;
   showNumbering: boolean;
   color: string;

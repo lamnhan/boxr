@@ -3,7 +3,7 @@ import {Store} from 'vuex';
 import {Category} from './types/category.type';
 import {Material} from './types/material.type';
 import {Template} from './types/template.type';
-import {Design, DesignDataBySide, DesignSide, EditingData} from './types/design.type';
+import {Design, DesignBySide, DesignSide, EditingData} from './types/design.type';
 
 import {fetchService} from './services/fetch.service';
 
@@ -14,7 +14,7 @@ export const store = new Store({
     templateRecord: {} as Record<number, Template[]>,
     materialRecord: {} as Record<number, Material[]>,
     // editor
-    lastSaved: new Date(),
+    lastSaved: null as null | Date,
     editingUnitId: 1,
     editingDesign: null as null | Design,
     editingData: null as null | EditingData,
@@ -79,9 +79,10 @@ export const store = new Store({
       state.editingDesign = design;
       return new Promise(resolve => setTimeout(() => resolve(design), 300))
     },
-    updateDesign({state}, {side, data}: {side: DesignSide, data: DesignDataBySide}) {
+    updateDesign({state}, {side, data}: {side: DesignSide, data: DesignBySide}) {
+      const unitId = state.editingUnitId;
       const design = state.editingDesign as Design;
-      design.design_data[side] = { ...design.design_data[side], ...data };
+      design.design_data[unitId][side] = { ...design.design_data[unitId][side], ...data };
       return state.editingDesign = design;
     },
     updateUnitId({state}, unitId: number) {

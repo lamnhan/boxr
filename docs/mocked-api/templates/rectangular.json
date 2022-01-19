@@ -4,7 +4,7 @@
     "slug": "rectangular-template-001",
     "title": "Box 001",
     "display_size": "W100 x L100 x H100 cm",
-    "thumbnail": "https://img.icons8.com/color/480/000000/box.png",
+    "thumbnail": "https://img.icons8.com/external-icongeek26-linear-colour-icongeek26/480/000000/external-box-logistics-delivery-icongeek26-linear-colour-icongeek26-3.png",
     "category_id": 1,
     "default_material_id": 1,
     "base_price": 3000,
@@ -12,7 +12,9 @@
     "spec": {
       "units": [
         {
-          "tilte": "Body",
+          "id": 1,
+          "title": "Body",
+          "thumbnail": "https://img.icons8.com/external-icongeek26-outline-icongeek26/64/000000/external-box-logistics-delivery-icongeek26-outline-icongeek26-3.png",
           "width_2d": 4.1,
           "height_2d": 2,
           "width_3d": 1,
@@ -24,56 +26,56 @@
               "po": { "g": "rectangle", "x": 0, "y": 0.5, "z": 0.25, "r": { "x": 90 } }
             },
             {
-              "id": 2, "x": 0, "y": 1, "w": 1, "h": 0.5,
+              "id": 2, "x": 1, "y": 0, "w": 1, "h": 0.5,
               "po": { "g": "rectangle", "x": 0.75, "y": 0.5, "z": -0.5, "r": { "x": 90, "z": -90 } }
             },
             {
-              "id": 3, "x": 0, "y": 2, "w": 1, "h": 0.5,
+              "id": 3, "x": 2, "y": 0, "w": 1, "h": 0.5,
               "pc": { "g": "rectangle", "x": 0, "y": 0.5, "z": -0.75, "r": { "x": 90, "y": -180 } },
               "po": { "g": "rectangle", "x": 0, "y": 0.5, "z": -1.25, "r": { "x": -90, "y": -180 } }
             },
             {
-              "id": 4, "x": 0, "y": 3, "w": 1, "h": 0.5,
+              "id": 4, "x": 3, "y": 0, "w": 1, "h": 0.5,
               "po": { "g": "rectangle", "x": -0.75, "y": 0.5, "z": -0.5, "r": { "x": 90, "z": 90 } }
             },
             {
-              "id": 5, "x": 0.5, "y": 0, "w": 1, "h": 1,
+              "id": 5, "x": 0, "y": 0.5, "w": 1, "h": 1,
               "pc": { "g": "rectangle", "x": 0, "y": 0, "z": 0 },
               "po": { "g": "rectangle", "x": 0, "y": 0, "z": 0 }
             },
             {
-              "id": 6, "x": 0.5, "y": 1, "w": 1, "h": 1,
+              "id": 6, "x": 1, "y": 0.5, "w": 1, "h": 1,
               "pc": { "g": "rectangle", "x": 0.5, "y": 0, "z": -0.5, "r": { "y": 90 } },
               "po": { "g": "rectangle", "x": 0.5, "y": 0, "z": -0.5, "r": { "y": 90 } }
             },
             {
-              "id": 7, "x": 0.5, "y": 2, "w": 1, "h": 1,
+              "id": 7, "x": 2, "y": 0.5, "w": 1, "h": 1,
               "pc": { "g": "rectangle", "x": 0, "y": 0, "z": -1, "r": { "y": 180 } },
               "po": { "g": "rectangle", "x": 0, "y": 0, "z": -1, "r": { "y": 180 } }
             },
             {
-              "id": 8, "x": 0.5, "y": 3, "w": 1, "h": 1,
+              "id": 8, "x": 3, "y": 0.5, "w": 1, "h": 1,
               "pc": { "g": "rectangle", "x": -0.5, "y": 0, "z": -0.5, "r": { "y": -90 } },
               "po": { "g": "rectangle", "x": -0.5, "y": 0, "z": -0.5, "r": { "y": -90 } }
             },
             {
-              "id": 9, "x": 0.5, "y": 4, "w": 0.1, "h": 1
+              "id": 9, "x": 4, "y": 0.5, "w": 0.1, "h": 1
             },
             {
-              "id": 10, "x": 1.5, "y": 0, "w": 1, "h": 0.5,
+              "id": 10, "x": 0, "y": 1.5, "w": 1, "h": 0.5,
               "pc": { "g": "rectangle", "x": 0, "y": -0.5, "z": -0.25, "r": { "x": 90 } },
               "po": { "g": "rectangle", "x": 0, "y": -0.5, "z": -0.25, "r": { "x": 90 } }
             },
             {
-              "id": 11, "x": 1.5, "y": 1, "w": 1, "h": 0.5
+              "id": 11, "x": 1, "y": 1.5, "w": 1, "h": 0.5
             },
             {
-              "id": 12, "x": 1.5, "y": 2, "w": 1, "h": 0.5,
+              "id": 12, "x": 2, "y": 1.5, "w": 1, "h": 0.5,
               "pc": { "g": "rectangle", "x": 0, "y": -0.5, "z": -0.75, "r": { "x": -90, "y": 180 } },
               "po": { "g": "rectangle", "x": 0, "y": -0.5, "z": -0.75, "r": { "x": -90, "y": 180 } }
             },
             {
-              "id": 13, "x": 1.5, "y": 3, "w": 1, "h": 0.5
+              "id": 13, "x": 3, "y": 1.5, "w": 1, "h": 0.5
             }
           ]
         }

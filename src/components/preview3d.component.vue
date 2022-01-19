@@ -14,10 +14,10 @@ const previewContainerRef = ref();
 const mode = ref<PlacementMode>('closed');
 
 // computed
-const lastSaved = computed(() => store.state.lastSaved);
 const unitId = computed(() => store.state.editingUnitId)
 const design = computed(() => store.state.editingDesign as Design)
 const data = computed(() => store.state.editingData as EditingData)
+const lastSaved = computed(() => store.state.lastSaved);
 const currentUnit = computed(() => data.value.template.spec.units.find(item => item.id === unitId.value) as TemplateUnit)
 const modeChooserAvailable = computed(() => !!currentUnit.value.parts.find(item => !!item.po))
 
@@ -34,11 +34,11 @@ async function renderDesign() {
   const outsideDesign2D = await new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
     .createCanvas()
-    .renderDesign('front', design.value.design_data['front'], currentUnit.value);
+    .renderDesign('front', design.value.design_data[unitId.value]['front'], currentUnit.value);
   const insideDesign2D = await new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
     .createCanvas()
-    .renderDesign('back', design.value.design_data['back'], currentUnit.value)
+    .renderDesign('back', design.value.design_data[unitId.value]['back'], currentUnit.value)
   const outsideTextures = outsideDesign2D.getDataUrls();
   const insideTextures = insideDesign2D.getDataUrls();
   preview3D

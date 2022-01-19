@@ -3,7 +3,7 @@ import {jsPDF} from 'jspdf'
 import 'svg2pdf.js'
 
 import {TemplateUnit, TemplatePart} from '../types/template.type';
-import {DesignDataBySide, DesignSide} from '../types/design.type';
+import {DesignBySide, DesignSide} from '../types/design.type';
 
 import {debounce} from '../helpers'
 import {Scale} from '../scale'
@@ -15,7 +15,7 @@ export class Design2D {
   skipChanged = false;
 
   side!: DesignSide;
-  data!: DesignDataBySide;
+  data!: DesignBySide;
   unit!: TemplateUnit;
   parts!: TemplatePart[];
 
@@ -51,7 +51,7 @@ export class Design2D {
     return this.canvas.toJSON();
   }
 
-  renderDesign(side: DesignSide, data: DesignDataBySide, unit: TemplateUnit): Promise<Design2D> {
+  renderDesign(side: DesignSide, data: DesignBySide, unit: TemplateUnit): Promise<Design2D> {
     this.side = side;
     this.data = data;
     this.unit = unit;

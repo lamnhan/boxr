@@ -8,11 +8,11 @@
     "textures": {
       "front": {
         "title": "Front",
-        "colors": ["#EEC373", "#FFAB76", "#FFF5E1"]
+        "colors": ["#EEC373", "#FFAB76", "#FEFEFE"]
       },
       "back": {
         "title": "Back",
-        "colors": ["#EEEEEE"]
+        "colors": ["#E9E5E0"]
       }
     }
   },
@@ -25,12 +25,12 @@
     "textures": {
       "front": {
         "title": "Front",
-        "colors": ["#FEFEFE", "#A6CF98", "#B958A5", "#7267CB", "#2C394B"],
+        "colors": ["#FEFEFE", "#2C394B", "#A6CF98", "#7267CB"],
         "customizable": true
       },
       "back": {
         "title": "Back",
-        "colors": ["#FEFEFE", "#2C394B", "#F9E4C8"],
+        "colors": ["#FEFEFE", "#2C394B"],
         "customizable": true
       }
     }

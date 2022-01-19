@@ -19,10 +19,10 @@ const side = ref<DesignSide>('front')
 const showSubmenu = ref<Record<string, boolean>>({})
 
 // computed
-const lastSaved = computed(() => store.state.lastSaved);
 const unitId = computed(() => store.state.editingUnitId)
 const design = computed(() => store.state.editingDesign as Design)
 const data = computed(() => store.state.editingData as EditingData)
+const lastSaved = computed(() => store.state.lastSaved || new Date(design.value.updated_at));
 const templateUnits = computed(() => data.value.template.spec.units)
 const currentUnit = computed(() => data.value.template.spec.units.find(item => item.id === unitId.value) as TemplateUnit)
 
@@ -43,7 +43,7 @@ function renderCanvas() {
 }
 
 function renderDesign() {
-  design2D.renderDesign(side.value, design.value.design_data[side.value], currentUnit.value)
+  design2D.renderDesign(side.value, design.value.design_data[unitId.value][side.value], currentUnit.value)
 }
 
 function init() {
@@ -62,6 +62,7 @@ function changeSide(newSide: DesignSide) {
 
 function changeUnit(unitId: number) {
   store.dispatch('updateUnitId', unitId)
+    .then(() => side.value === 'front' ? false : changeSide('front'))
 }
 
 function addText() {
@@ -170,11 +171,11 @@ watch(unitId, () => {
             <div class="body">
               <label>
                 <span>Show background</span>
-                <input type="checkbox" @change="toggleBackdrop($event)" :checked="design.design_data[side].showBackdrop">
+                <input type="checkbox" @change="toggleBackdrop($event)" :checked="design.design_data[unitId][side].showBackdrop">
               </label>
               <label>
                 <span>Show part number</span>
-                <input type="checkbox" @change="toggleNumbering($event)" :checked="design.design_data[side].showNumbering">
+                <input type="checkbox" @change="toggleNumbering($event)" :checked="design.design_data[unitId][side].showNumbering">
               </label>
             </div>
           </div>
@@ -224,6 +225,7 @@ watch(unitId, () => {
     }
 
     .units {
+      height: 50%;
 
       ul {
         list-style: none;
@@ -236,7 +238,7 @@ watch(unitId, () => {
           justify-content: center;
           padding: 10px;
           margin: 10px 0;
-          border: 1px solid #cccccc;
+          border: 1px solid #f1f1f1;
           border-radius: 5px;
           cursor: pointer;
 
