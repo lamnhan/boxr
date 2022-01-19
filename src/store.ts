@@ -14,6 +14,8 @@ export const store = new Store({
     templateRecord: {} as Record<number, Template[]>,
     materialRecord: {} as Record<number, Material[]>,
     // editor
+    lastSaved: new Date(),
+    editingUnitId: 1,
     editingDesign: null as null | Design,
     editingData: null as null | EditingData,
   },
@@ -57,16 +59,7 @@ export const store = new Store({
       );
       return state.materialRecord[template.id];
     },
-    createDesign({state}, design: Design) {
-      state.editingDesign = design;
-      return new Promise(resolve => setTimeout(() => resolve(design), 300))
-    },
-    updateDesignData({state}, {side, data}: {side: DesignSide, data: DesignDataBySide}) {
-      const design = state.editingDesign as Design;
-      design.design_data[side] = { ...design.design_data[side], ...data };
-      return state.editingDesign = design;
-    },
-    async loadEditingData({state}, designId: number) {
+    async loadEditing({state}, designId: number) {
       // load design
       await (
         state.editingDesign && state.editingDesign.id === designId
@@ -81,6 +74,21 @@ export const store = new Store({
       // result
       const {editingDesign, editingData} = state;
       return {editingDesign, editingData};
+    },
+    createDesign({state}, design: Design) {
+      state.editingDesign = design;
+      return new Promise(resolve => setTimeout(() => resolve(design), 300))
+    },
+    updateDesign({state}, {side, data}: {side: DesignSide, data: DesignDataBySide}) {
+      const design = state.editingDesign as Design;
+      design.design_data[side] = { ...design.design_data[side], ...data };
+      return state.editingDesign = design;
+    },
+    updateUnitId({state}, unitId: number) {
+      return state.editingUnitId = unitId;
+    },
+    updateLastSaved({state}) {
+      return state.lastSaved = new Date();
     }
   },
 })

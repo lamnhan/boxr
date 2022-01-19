@@ -1,5 +1,92 @@
 [
-  {"id": "rec-lid-01", "title": "10 x 10 x 10cm", "price": 0, "width": 0.1, "length": 0.1, "height": 0.1},
-  {"id": "rec-lid-02", "title": "10 x 20 x 10cm", "price": 0, "width": 0.1, "length": 0.2, "height": 0.1},
-  {"id": "rec-lid-03", "title": "20 x 10 x 10cm", "price": 0, "width": 0.2, "length": 0.1, "height": 0.1}
+  {
+    "id": 2,
+    "slug": "rectangular-with-lid-template-001",
+    "title": "Box 002",
+    "display_size": "W100 x L100 x H100 cm",
+    "thumbnail": "https://img.icons8.com/office/480/000000/box--v1.png",
+    "category_id": 1,
+    "default_material_id": 1,
+    "base_price": 5000,
+    "sale_off": 0,
+    "spec": {
+      "units": [
+        {
+          "id": 1,
+          "title": "Body",
+          "thumbnail": "https://img.icons8.com/ios/50/000000/orthogonal-view--v1.png",
+          "width_2d": 4.1,
+          "height_2d": 1.5,
+          "width_3d": 1,
+          "height_3d": 1,
+          "parts": [
+            {
+              "id": 1, "x": 0, "y": 0, "w": 1, "h": 1,
+              "pc": { "g": "rectangle", "x": 0, "y": 0, "z": 0 }
+            },
+            {
+              "id": 2, "x": 1, "y": 0, "w": 1, "h": 1,
+              "pc": { "g": "rectangle", "x": 0.5, "y": 0, "z": -0.5, "r": { "y": 90 } }
+            },
+            {
+              "id": 3, "x": 2, "y": 0, "w": 1, "h": 1,
+              "pc": { "g": "rectangle", "x": 0, "y": 0, "z": -1, "r": { "y": 180 } }
+            },
+            {
+              "id": 4, "x": 3, "y": 0, "w": 1, "h": 1,
+              "pc": { "g": "rectangle", "x": -0.5, "y": 0, "z": -0.5, "r": { "y": -90 } }
+            },
+            {
+              "id": 5, "x": 4, "y": 0, "w": 0.1, "h": 1
+            },
+            {
+              "id": 6, "x": 0, "y": 1, "w": 1, "h": 0.5,
+              "pc": { "g": "rectangle", "x": 0, "y": -0.5, "z": -0.25, "r": { "x": 90 } }
+            },
+            {
+              "id": 7, "x": 1, "y": 1, "w": 1, "h": 0.5
+            },
+            {
+              "id": 8, "x": 2, "y": 1, "w": 1, "h": 0.5,
+              "pc": { "g": "rectangle", "x": 0, "y": -0.5, "z": -0.75, "r": { "x": -90, "y": 180 } }
+            },
+            {
+              "id": 9, "x": 3, "y": 1, "w": 1, "h": 0.5
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Lid",
+          "thumbnail": "https://img.icons8.com/ios/50/000000/unchecked-checkbox.png",
+          "width_2d": 1.2,
+          "height_2d": 1.2,
+          "width_3d": 1,
+          "height_3d": 1,
+          "parts": [
+            {
+              "id": 1, "x": 0.1, "y": 0, "w": 1, "h": 0.1,
+              "pc": { "g": "rectangle", "x": 0, "y": 0, "z": -1, "r": { "y": 180, "z": 180 } }
+            },
+            {
+              "id": 2, "x": 0, "y": 0.1, "w": 0.1, "h": 1,
+              "pc": { "g": "rectangle", "x": -0.5, "y": 0, "z": -0.5, "r": { "x": -90, "y": -90 } }
+            },
+            {
+              "id": 3, "x": 0.1, "y": 0.1, "w": 1, "h": 1,
+              "pc": { "g": "rectangle", "x": 0, "y": 0.05, "z": -0.5, "r": { "x": -90 } }
+            },
+            {
+              "id": 4, "x": 1.1, "y": 0.1, "w": 0.1, "h": 1,
+              "pc": { "g": "rectangle", "x": 0.5, "y": 0, "z": -0.5, "r": { "x": -90, "y": 90 } }
+            },
+            {
+              "id": 5, "x": 0.1, "y": 1.1, "w": 1, "h": 0.1,
+              "pc": { "g": "rectangle", "x": 0, "y": 0, "z": 0 }
+            }
+          ]
+        }
+      ]
+    }
+  }
 ]

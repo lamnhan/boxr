@@ -18,6 +18,8 @@
   ],
   "dependencies": {
     "fabric": "^4.6.0",
+    "jspdf": "^2.5.0",
+    "svg2pdf.js": "^2.2.0",
     "three": "^0.136.0",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12",

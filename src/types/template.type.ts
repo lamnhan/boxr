@@ -16,7 +16,9 @@ export interface TemplateSpec {
 }
 
 export interface TemplateUnit {
-  title: string
+  id: number;
+  title: string;
+  thumbnail: string;
   width_2d: number;
   height_2d: number;
   width_3d: number;

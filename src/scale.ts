@@ -26,10 +26,10 @@ export class Scale {
   }
 
   getMeters(length: number) {
-    this.scaleCorrection * length
+    return length * this.scaleCorrection
   }
 
   getPixels(length: number) {
-    return this.scaleCorrection * length / PX2M
+    return length * this.scaleCorrection / PX2M
   }
 }

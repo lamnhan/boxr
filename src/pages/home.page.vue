@@ -195,7 +195,7 @@ store.dispatch('loadCategoriesAndTemplates')
                 </div>
               </div>
               <div class="actions">
-                <button @click.stop="editFromTemplate()">Start editing</button>
+                <button @click.stop="editFromTemplate()">Start design</button>
               </div>
             </div>
 

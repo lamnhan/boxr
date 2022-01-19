@@ -7,21 +7,21 @@ import Preview3D from '../components/preview3d.component.vue'
 import {router} from '../router';
 import {store} from '../store';
 
+const unitId = computed(() => store.state.editingUnitId)
 const design = computed(() => store.state.editingDesign)
 const data = computed(() => store.state.editingData)
 
 const mode = ref<'design' | 'preview'>('design')
-const unit = ref(0)
 
 store.dispatch(
-  'loadEditingData',
+  'loadEditing',
   +((router.currentRoute.value.params.iid as string).split('-').pop() as string)
 )
 </script>
 
 <template>
 
-  <div class="main" v-if="design && data">
+  <div class="main" v-if="unitId && design && data">
 
     <div class="header">
       <div class="info">
@@ -40,19 +40,10 @@ store.dispatch(
 
     <div class="body">
       <div class="design-view" :style="{zIndex: mode === 'design' ? 1 : -1}">
-        <Editor2D
-          :design="design"
-          :data="data"
-          :unit="unit"
-          @design-changed="store.dispatch('updateDesignData', $event)"
-        ></Editor2D>
+        <Editor2D></Editor2D>
       </div>
       <div class="preview-view" :style="{zIndex: mode === 'preview' ? 1 : -1}">
-        <Preview3D
-          :design="design"
-          :data="data"
-          :unit="unit"
-        ></Preview3D>
+        <Preview3D></Preview3D>
       </div>
     </div>
 

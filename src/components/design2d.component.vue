@@ -1,43 +1,38 @@
 <script lang="ts" setup>
-import {ref, computed, defineProps, defineEmits, onMounted, watch} from 'vue'
+import {ref, computed, onMounted, watch} from 'vue'
 
 import {Design, EditingData, DesignSide} from '../types/design.type'
+import {TemplateUnit} from '../types/template.type';
 
 import {Design2D} from '../objects/design2d.object';
+
+import { store } from '../store';
 
 import recycleSymbol from '../assets/recycle.png';
 import upSymbol from '../assets/up.png';
 import drySymbol from '../assets/dry.png';
 
-// inputs
-const props = defineProps<{
-  design: Design;
-  data: EditingData;
-  unit: number;
-}>();
+const sampleSymbols = [recycleSymbol, upSymbol, drySymbol];
 
 // ref
 const side = ref<DesignSide>('front')
-const lastSaved = ref<Date>(new Date());
 const showSubmenu = ref<Record<string, boolean>>({})
 
 // computed
-const currentUnit = computed(() => props.data.template.spec.units[props.unit])
-
-// outputs
-const emits = defineEmits<{
-  (event: 'designChanged', data: Record<string, any>): void;
-}>();
+const lastSaved = computed(() => store.state.lastSaved);
+const unitId = computed(() => store.state.editingUnitId)
+const design = computed(() => store.state.editingDesign as Design)
+const data = computed(() => store.state.editingData as EditingData)
+const templateUnits = computed(() => data.value.template.spec.units)
+const currentUnit = computed(() => data.value.template.spec.units.find(item => item.id === unitId.value) as TemplateUnit)
 
 // canvas
 let design2D!: Design2D
 
-const sampleShapes = [recycleSymbol, upSymbol, drySymbol];
-
 // helpers
 function emitDesignChanged(data: any) {
-  lastSaved.value = new Date();
-  emits('designChanged', { side: side.value, data })
+  store.dispatch('updateLastSaved')
+  store.dispatch('updateDesign', { side: side.value, data })
 }
 
 // methods
@@ -48,7 +43,7 @@ function renderCanvas() {
 }
 
 function renderDesign() {
-  design2D.renderDesign(side.value, props.design.design_data[side.value], currentUnit.value)
+  design2D.renderDesign(side.value, design.value.design_data[side.value], currentUnit.value)
 }
 
 function init() {
@@ -65,6 +60,10 @@ function changeSide(newSide: DesignSide) {
   side.value = newSide;
 }
 
+function changeUnit(unitId: number) {
+  store.dispatch('updateUnitId', unitId)
+}
+
 function addText() {
   design2D.addText()
 }
@@ -78,6 +77,10 @@ function uploadImage(e: any) {
   const reader = new FileReader();
   reader.addEventListener('load', e => design2D.addImage(e.target?.result as string)); 
   reader.readAsDataURL(e.target.files[0]);
+}
+
+function downloadPDF() {
+  design2D.toPDF().then(doc => doc.save(`${design.value.title} - ${side.value}.pdf`))
 }
 
 function toggleBackdrop(e: any) {
@@ -107,11 +110,38 @@ function toggleSubmenu(name: string) {
 
 onMounted(init)
 watch(side, update)
+watch(unitId, () => {
+  design2D.canvas.dispose()
+  init()
+})
 </script>
 
 <template>
   <div class="main">
-    <div class="left-tools"></div>
+    <div class="left-tools">
+      <section class="units">
+        <div class="head">Units</div>
+        <div class="body">
+          <ul>
+            <li
+              v-for="(unitItem, i) in templateUnits"
+              :key="i"
+              :class="{ active: unitItem.id === currentUnit.id }"
+              @click="changeUnit(unitItem.id)"
+            >
+              <img :src="unitItem.thumbnail" :alt="unitItem.title">
+              <span>{{ unitItem.title }}</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section class="export">
+        <div class="head">Export</div>
+        <div class="body">
+          <button @click="downloadPDF()">Save PDF</button>
+        </div>
+      </section>
+    </div>
     <div id="editor-container"><canvas id="canvas-2d"></canvas></div>
     <div class="right-tools">
       <ul class="menu">
@@ -129,7 +159,7 @@ watch(side, update)
           <div class="sub-menu" v-if="showSubmenu['symbol']">
             <div class="head">Add symbol</div>
             <div class="body">
-              <ul><li v-for="(item, i) in sampleShapes" @click="addSymbol(item)"><img :src="item"></li></ul>
+              <ul><li v-for="(symbolItem, i) in sampleSymbols" @click="addSymbol(symbolItem)" :key="i"><img :src="symbolItem"></li></ul>
             </div>
           </div>
         </li>
@@ -176,6 +206,82 @@ watch(side, update)
     height: calc(100vh - 100px);
     background: #fff;
     border-right: 1px solid #ccc;
+
+    section {
+
+      .head {
+        background: #f1f1f1;
+        font-size: 14px;
+        color: #333333;
+        padding: 5px 10px;
+        border-top: 1px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
+      }
+
+      .body {
+        padding: 10px;
+      }
+    }
+
+    .units {
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0 15px;
+
+        li {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 10px;
+          margin: 10px 0;
+          border: 1px solid #cccccc;
+          border-radius: 5px;
+          cursor: pointer;
+
+          &:hover {
+            background: #f1f1f1;
+          }
+
+          &.active {
+            background: #f1f1f1;
+            border-color: #333333;
+          }
+
+          img {
+            width: 48px;
+          }
+          
+          span {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #777777;
+          }
+        }
+      }
+    }
+
+    .export {
+
+      button {
+        background: #333333;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        padding: 10px;
+        width: 100%;
+        cursor: pointer;
+
+        &:hover {
+          opacity: .7;
+        }
+      }      
+    }
   }
 
   #editor-container {
@@ -260,9 +366,10 @@ watch(side, update)
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
           .head {
+            font-size: 14px;
             padding: 5px 10px;
             border-bottom: 1px solid #cccccc;
-            color: #777777;
+            color: #333333;
           }
 
           .body {
