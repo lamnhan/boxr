@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import {ref, computed} from 'vue';
+import {ColorPicker} from 'vue-color-kit'
+import 'vue-color-kit/dist/vue-color-kit.css'
 
 import {Category} from '../types/category.type';
 import {Template} from '../types/template.type';
@@ -9,11 +11,20 @@ import {Design, DesignSide, DesignData} from '../types/design.type';
 import {router} from '../router';
 import {store} from '../store';
 
+const colorPickerOptions = {
+  color: '#ffffff',
+  suckerCanvas: null,
+  suckerArea: [],
+  isSucking: false,
+}
+
 const tab = ref('blank')
 const activeCategory = ref<null | Category>(null)
 const activeTemplate = ref<null | Template>(null)
 const activeMaterial = ref<null | Material>(null)
 const activeColors = ref<null | Record<any, string>>(null)
+const activePicker = ref<null | string>(null)
+const customColors = ref<Record<string, string>>({})
 
 const categories = computed(() => store.state.categories)
 const materialRecord = computed(() => store.state.materialRecord)
@@ -60,6 +71,8 @@ function editFromTemplate() {
 }
 
 async function selectTemplate(category: Category, template: Template) {
+  // reset color picker
+  activePicker.value = null
   // set active category
   activeCategory.value = category
   // set active template
@@ -75,12 +88,13 @@ async function selectTemplate(category: Category, template: Template) {
 }
 
 function selectMaterial(material: Material) {
-  // reset color
-  activeColors.value = null
   // set active material
   activeMaterial.value = material
   // set default color
-  activeColors.value = Object.keys(activeMaterial.value.textures).reduce(
+  // reset color/picker
+  activeColors.value = null
+  activePicker.value = null
+  const defaultColor = Object.keys(activeMaterial.value.textures).reduce(
     (result, name) => {
       result[name as DesignSide] = ((activeMaterial.value as Material)
         .textures[name as DesignSide] as Texture)
@@ -89,14 +103,23 @@ function selectMaterial(material: Material) {
     },
     {} as Record<any, string>
   )
+  Object.keys(defaultColor).forEach(name => selectColor(name, defaultColor[name]))
 }
 
-function selectColor(name: any, color: string) {
-  activeColors.value = { ...activeColors.value, [name]: color } as Record<any, string>
+function selectColor(name: any, color: string, keepPicker = false) {
+  if (!keepPicker) activePicker.value = null;
+  delete customColors.value[name];
+  activeColors.value = { ...activeColors.value, [name]: color } as Record<any, string>;
 }
 
-function chooseCustomColor() {
-  alert('TODO: choose custom color ...')
+function chooseCustomColor(name: string) {
+  activePicker.value = activePicker.value === name ? null : name;
+}
+
+function changeColor(name: string, data: any) {
+  const color = data.hex as string;
+  selectColor(name, color, true);
+  customColors.value[name] = color;
 }
 
 store.dispatch('loadCategoriesAndTemplates')
@@ -195,7 +218,28 @@ store.dispatch('loadCategoriesAndTemplates')
                         >
                           <h6 class="thumbnail" :style="{background: colorItem}"></h6>
                         </li>
-                        <li class="choose-custom" v-if="textureItem?.customizable" @click.stop="chooseCustomColor()">(+)</li>
+                        <li class="choose-custom" v-if="textureItem?.customizable">
+                          <button
+                            @click.stop="chooseCustomColor(k)"
+                            :style="{
+                              background: customColors[k] || 'none',
+                              boxShadow: !customColors[k] ? 'none' : '0 0 0 3px rgb(17, 60, 252, .5)'
+                            }"
+                          >{{ activePicker !== k ? '+' : '✕' }}</button>
+                          <div
+                            class="color-picker"
+                            :style="{ display: activePicker === k ? 'block' : 'none' }"
+                          >
+                            <ColorPicker
+                              theme="light"
+                              :color="colorPickerOptions.color"
+                              :sucker-hide="false"
+                              :sucker-canvas="colorPickerOptions.suckerCanvas"
+                              :sucker-area="colorPickerOptions.suckerArea"
+                              @changeColor="changeColor(k, $event)"
+                            />
+                          </div>
+                        </li>
                       </ul>
                     </div>
                   </template>
@@ -440,7 +484,25 @@ store.dispatch('loadCategoriesAndTemplates')
                 }
 
                 .choose-custom {
-                  margin-left: 1rem;
+                  margin-left: .25rem;
+                  position: relative;
+
+                  button {
+                    cursor: pointer;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 100%;
+                    border: 1px solid #cccccc;
+                    background: none;
+                    font-size: 1.1rem;
+                    color: #333333;
+                  }
+
+                  .color-picker {
+                    position: absolute;
+                    top: 0;
+                    left: 40px;
+                  }
                 }
               }
 
