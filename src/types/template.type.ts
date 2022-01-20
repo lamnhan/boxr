@@ -35,6 +35,9 @@ export interface TemplatePart {
   c?: Clipping;
   pc?: Placement; // closed
   po?: Placement; // opened
+  // cylindrical only
+  rT?: number;
+  rB?: number;
 }
 
 export interface Placement {

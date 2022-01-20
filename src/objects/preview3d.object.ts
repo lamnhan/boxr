@@ -81,7 +81,7 @@ export class Preview3D {
   private renderParts(mode: PlacementMode, parts: TemplatePart[], {outsideTextures, insideTextures}: TextureData) {
     const placementMap: Record<string, 'pc' | 'po'> = {closed: 'pc', opened: 'po'};
     parts.forEach(item => {
-      const {id, w, h} = item;
+      const {id, w, h, rT, rB} = item;
       const placementData = item[placementMap[mode]];
       if (!placementData) return; // no pleacement
       const {g, x: pX, y: pY, z: pZ, r: {x: rX, y: rY, z: rZ} = {}} = placementData;
@@ -100,8 +100,9 @@ export class Preview3D {
       let meshes!: { outsideMesh: Mesh, insideMesh: Mesh };
       switch (g) {
         case 'cylinder':
-          const r = w / (2 * Math.PI)
-          meshes = this.buildCylinder(r, r, h, outsideMaterial, insideMaterial);
+          const r1 = rT || w / (2 * Math.PI)
+          const r2 = rB || w / (2 * Math.PI)
+          meshes = this.buildCylinder(r1, r2, h, outsideMaterial, insideMaterial);
           break;
         case 'circle':
           meshes = this.buildCircle(w / 2, outsideMaterial, insideMaterial);

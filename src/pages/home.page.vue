@@ -326,6 +326,7 @@ store.dispatch('loadCategoriesAndTemplates')
 
         .links {
           border-bottom: 1px solid #cccccc;
+          margin-top: 1rem;
 
           h4 {
             display: inline-block;
