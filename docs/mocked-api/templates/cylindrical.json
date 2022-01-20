@@ -1,5 +1,41 @@
 [
-  {"id": "syl-01", "title": "10 x 10cm", "price": 0, "radius": 0.1, "height": 0.1},
-  {"id": "syl-02", "title": "10 x 20cm", "price": 0, "radius": 0.1, "height": 0.2},
-  {"id": "syl-03", "title": "20 x 10cm", "price": 0, "radius": 0.2, "height": 0.1}
+  {
+    "id": 3,
+    "slug": "cylindrical-template-001",
+    "title": "Box 003",
+    "display_size": "R50 x R30 x H100 cm",
+    "thumbnail": "/thumbnails/cylindrical.png",
+    "category_id": 3,
+    "default_material_id": 2,
+    "base_price": 2500,
+    "sale_off": 0,
+    "spec": {
+      "units": [
+        {
+          "id": 1,
+          "title": "Body",
+          "thumbnail": "https://img.icons8.com/external-dreamstale-lineal-dreamstale/48/000000/external-cylinder-geometry-dreamstale-lineal-dreamstale.png",
+          "width_2d": 3.24,
+          "height_2d": 2,
+          "width_3d": 1,
+          "height_3d": 1,
+          "parts": [
+            {
+              "id": 1, "x": 0, "y": 0, "w": 3.14, "h": 1, "rT": 0.5, "rB": 0.3,
+              "pc": { "g": "cylinder", "x": 0, "y": 0, "z": 0 }
+            },
+            {
+              "id": 2, "x": 3.14, "y": 0, "w": 0.1, "h": 1,
+              "c": { "x": 0, "y": 0, "w": 0.1, "h": 1, "p": "M 0 0 L 10 5 L 10 95 L 0 100 L 0 0" }
+            },
+            {
+              "id": 3, "x": 1.265, "y": 1, "w": 0.61, "h": 0.61,
+              "c": { "x": 0, "y": 0, "w": 0.61, "h": 0.61, "p": "M 0 0 A 1 1 0 0 0 61 0 A 1 1 0 0 0 0 0"},
+              "pc": { "g": "circle", "x": 0, "y": -0.45, "z": 0, "r": { "x": -90, "y": 180 } }
+            }
+          ]
+        }
+      ]
+    }
+  }
 ]
