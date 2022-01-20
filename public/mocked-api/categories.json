@@ -17,8 +17,8 @@
   },
   {
     "id": 3,
-    "slug": "cylindrical",
-    "title": "Cylindrical",
+    "slug": "cylindrical-lid",
+    "title": "Cylindrical + lid",
     "description": "Cylindrical box of all sizes",
     "thumbnail": "/icons/cylindrical.svg",
     "image": "/images/cylindrical.jpg"

@@ -116,7 +116,8 @@ store.dispatch('loadCategoriesAndTemplates')
         <img :src="categoryItem.thumbnail" :alt="categoryItem.title">
         <strong>{{categoryItem.title}}</strong>
       </h2>
-      <ul class="template-list">
+      <p v-if="!templateRecord[categoryItem.id]?.length">No template available!</p>
+      <ul class="template-list" v-else>
         <li
           v-for="(templateItem, j) in templateRecord[categoryItem.id]"
           :key="j"
@@ -235,6 +236,8 @@ store.dispatch('loadCategoriesAndTemplates')
 
 .main {
   padding: 3rem;
+  max-width: 992px;
+  margin: auto;
 
   .category-list {
     list-style: none;
