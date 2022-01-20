@@ -143,21 +143,35 @@ export class Design2D {
     this.backdropObjects = [];
     this.numberingObjects = [];
     this.parts.forEach(item => {
-      const {id, x, y, w, h} = item;
+      const {id, x, y, w, h, c} = item;
       const width = this.scale.getPixels(w)
       const height = this.scale.getPixels(h)
       const top = this.scale.getPixels(y)
       const left = this.scale.getPixels(x)
       // backdrop
-      const fill = this.data.color
+      let clipPath: undefined | fabric.Path;
+      if (c) {
+        const scaledWidth = this.scale.getPixels(c.w)
+        const scaledHeight = this.scale.getPixels(c.h)
+        clipPath = new fabric.Path(c.p, {
+          originX: 'center',
+          originY: 'center',
+          top: c.y,
+          left: c.x,
+          flipX: this.side === 'back'
+        });
+        clipPath.scaleToWidth(scaledWidth);
+        clipPath.scaleToHeight(scaledHeight);
+      }
       const rect = new fabric.Rect({
         width,
         height,
         top,
         left,
-        fill,
+        fill: this.data.color,
         selectable: false,
-        excludeFromExport: true
+        excludeFromExport: true,
+        clipPath
       })
       this.backdropObjects.push(rect)
       // part numbering

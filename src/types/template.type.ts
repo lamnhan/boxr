@@ -32,7 +32,7 @@ export interface TemplatePart {
   y: number;
   w: number;
   h: number;
-  c?: string;
+  c?: Clipping;
   pc?: Placement; // closed
   po?: Placement; // opened
 }
@@ -47,6 +47,14 @@ export interface Placement {
     y?: number;
     z?: number;
   }
+}
+
+export interface Clipping {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  p: string;
 }
 
 export type PlacementMode = 'closed' | 'opened';

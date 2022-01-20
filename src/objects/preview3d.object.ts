@@ -11,7 +11,6 @@ import {
   Group,
   Color,
   MeshBasicMaterial,
-  Texture,
   TextureLoader,
   FrontSide,
   BackSide,
@@ -89,21 +88,27 @@ export class Preview3D {
       const outsideTextureUrl = outsideTextures[id]
       const insideTextureUrl = insideTextures[id]
       // load textures
-      const outsideTexture = new TextureLoader().load(outsideTextureUrl);
-      const insideTexture = new TextureLoader().load(insideTextureUrl);
+      const outsideMaterial = new MeshBasicMaterial({
+        map: new TextureLoader().load(outsideTextureUrl),
+        transparent: true,
+      })
+      const insideMaterial = new MeshBasicMaterial({
+        map: new TextureLoader().load(insideTextureUrl),
+        transparent: true,
+      })
       // build shape
       let meshes!: { outsideMesh: Mesh, insideMesh: Mesh };
       switch (g) {
         case 'cylinder':
           const r = w / (2 * Math.PI)
-          meshes = this.buildCylinder(r, r, h, outsideTexture, insideTexture);
+          meshes = this.buildCylinder(r, r, h, outsideMaterial, insideMaterial);
           break;
         case 'circle':
-          meshes = this.buildCircle(w / 2, outsideTexture, insideTexture);
+          meshes = this.buildCircle(w / 2, outsideMaterial, insideMaterial);
           break;
         case 'rectangle':
         default:
-          meshes = this.buildRectangle(w, h, outsideTexture, insideTexture);
+          meshes = this.buildRectangle(w, h, outsideMaterial, insideMaterial);
       }
       // group
       const group = new Group().add(meshes.outsideMesh, meshes.insideMesh);
@@ -117,39 +122,26 @@ export class Preview3D {
     })
   }
 
-  private buildRectangle(w: number, h: number, outsideTexture: Texture, insideTexture: Texture) {
-    const outsideMesh = new Mesh(
-      new PlaneGeometry(w, h),
-      new MeshBasicMaterial({ map: outsideTexture })
-    )
-    const insideMesh = new Mesh(
-      new PlaneGeometry(w, h),
-      new MeshBasicMaterial({ map: insideTexture })
-    ).rotateY(Math.PI)
+  private buildRectangle(w: number, h: number, outsideMaterial: MeshBasicMaterial, insideMaterial: MeshBasicMaterial) {
+    const geometry = new PlaneGeometry(w, h)
+    const outsideMesh = new Mesh(geometry, outsideMaterial)
+    const insideMesh = new Mesh(geometry, insideMaterial).rotateY(Math.PI)
     return { outsideMesh, insideMesh };
   }
 
-  private buildCircle(r: number, outsideTexture: Texture, insideTexture: Texture) {
-    const outsideMesh = new Mesh(
-      new CircleGeometry(r, 100),
-      new MeshBasicMaterial({ map: outsideTexture })
-    )
-    const insideMesh = new Mesh(
-      new CircleGeometry(r, 100),
-      new MeshBasicMaterial({ map: insideTexture })
-    ).rotateY(Math.PI)
+  private buildCircle(r: number, outsideMaterial: MeshBasicMaterial, insideMaterial: MeshBasicMaterial) {
+    const geometry = new CircleGeometry(r, 100);
+    const outsideMesh = new Mesh(geometry, outsideMaterial)
+    const insideMesh = new Mesh(geometry, insideMaterial).rotateY(Math.PI)
     return { outsideMesh, insideMesh };
   }
 
-  private buildCylinder(rT: number, rB: number, h: number, outsideTexture: Texture, insideTexture: Texture) {
-    const outsideMesh = new Mesh(
-      new CylinderGeometry(rT, rB, h, 100, 1, true),
-      new MeshBasicMaterial({ map: outsideTexture, side: FrontSide })
-    )
-    const insideMesh = new Mesh(
-      new CylinderGeometry(rT, rB, h, 100, 1, true),
-      new MeshBasicMaterial({ map: insideTexture, side: BackSide })
-    )
+  private buildCylinder(rT: number, rB: number, h: number, outsideMaterial: MeshBasicMaterial, insideMaterial: MeshBasicMaterial) {
+    const geometry = new CylinderGeometry(rT, rB, h, 100, 1, true);
+    outsideMaterial.side = FrontSide;
+    const outsideMesh = new Mesh(geometry, outsideMaterial)
+    insideMaterial.side = BackSide;
+    const insideMesh = new Mesh(geometry, insideMaterial)
     return { outsideMesh, insideMesh };
   }
 
