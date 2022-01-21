@@ -19,6 +19,7 @@
           "height_2d": 2,
           "width_3d": 1,
           "height_3d": 1,
+          "folding_lines": "/folds/rectangular-template-001-1.svg",
           "parts": [
             {
               "id": 1, "x": 0, "y": 0, "w": 1, "h": 0.5,

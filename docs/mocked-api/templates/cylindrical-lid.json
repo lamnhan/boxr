@@ -19,6 +19,7 @@
           "height_2d": 2,
           "width_3d": 1,
           "height_3d": 1,
+          "folding_lines": "/folds/cylindrical-lid-template-001-1.svg",
           "parts": [
             {
               "id": 1, "x": 0, "y": 0, "w": 3.14, "h": 1,
@@ -43,6 +44,7 @@
           "height_2d": 1.1,
           "width_3d": 1,
           "height_3d": 0.1,
+          "folding_lines": "/folds/cylindrical-lid-template-001-2.svg",
           "parts": [
             {
               "id": 1, "x": 1.07, "y": 0, "w": 1, "h": 1,

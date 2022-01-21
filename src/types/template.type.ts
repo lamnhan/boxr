@@ -23,6 +23,7 @@ export interface TemplateUnit {
   height_2d: number;
   width_3d: number;
   height_3d: number;
+  folding_lines: string;
   parts: TemplatePart[];
 }
 

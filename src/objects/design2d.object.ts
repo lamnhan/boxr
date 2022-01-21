@@ -21,6 +21,7 @@ export class Design2D {
 
   backdropObjects: fabric.Object[] = [];
   numberingObjects: fabric.Object[] = [];
+  foldingObject?: fabric.Object;
 
   constructor() {}
 
@@ -51,18 +52,19 @@ export class Design2D {
     return this.canvas.toJSON();
   }
 
-  renderDesign(side: DesignSide, data: DesignBySide, unit: TemplateUnit): Promise<Design2D> {
+  async renderDesign(side: DesignSide, data: DesignBySide, unit: TemplateUnit): Promise<Design2D> {
     this.side = side;
     this.data = data;
     this.unit = unit;
     this.parts = this.getParts();
     // global objects
-    this.buildGlobalObjects();
+    await this.buildGlobalObjects();
     // render design
     return new Promise(resolve => {
       this.canvas.loadFromJSON(this.data.canvasJSON, () => {
         if (this.silentCanvas || data.showBackdrop) this.toggleBackdrop()
         if (data.showNumbering) this.toggleNumbering()
+        if (data.showFolding) this.toggleFolding()
         resolve(this);
       })
     });
@@ -96,6 +98,15 @@ export class Design2D {
           ? this.canvas.add(obj).bringToFront(obj)
           : this.canvas.remove(obj)
     )
+  }
+
+  toggleFolding(isShow = true) {
+    if (!this.foldingObject) return
+    this.skipChanged = true;
+    this.data.showFolding = isShow;
+    return isShow
+      ? this.canvas.add(this.foldingObject).bringToFront(this.foldingObject)
+      : this.canvas.remove(this.foldingObject)
   }
 
   addText() {
@@ -135,11 +146,15 @@ export class Design2D {
   }
 
   private rearrangeHelpers() {
-    if (!this.data.showNumbering) return
-    this.numberingObjects.forEach(obj => this.canvas.bringToFront(obj))
+    if (this.data.showNumbering) {
+      this.numberingObjects.forEach(obj => this.canvas.bringToFront(obj))
+    }
+    if (this.data.showFolding && this.foldingObject) {
+      this.canvas.bringToFront(this.foldingObject)
+    }
   }
 
-  private buildGlobalObjects() {
+  private async buildGlobalObjects() {
     this.backdropObjects = [];
     this.numberingObjects = [];
     this.parts.forEach(item => {
@@ -169,9 +184,10 @@ export class Design2D {
         top,
         left,
         fill: this.data.color,
+        clipPath,
+        evented: false,
         selectable: false,
-        excludeFromExport: true,
-        clipPath
+        excludeFromExport: true
       })
       this.backdropObjects.push(rect)
       // part numbering
@@ -182,12 +198,17 @@ export class Design2D {
           top: top + 5,
           fontSize: 16,
           fill: 'rgba(0, 0, 0, 0.5)',
+          evented: false,
           selectable: false,
           excludeFromExport: true
         }
       )
       this.numberingObjects.push(txt)
     })
+    // folding
+    if (this.unit.folding_lines) {
+      this.foldingObject = await this.createFoldingObject(this.unit.folding_lines)
+    }
   }
 
   private buildCanvas(id?: string, changedHandler?: Function) {
@@ -206,6 +227,24 @@ export class Design2D {
     this.canvas.on('object:modified', () => onChanged(this))
     // done
     return this as Design2D;
+  }
+
+  private createFoldingObject(url: string): Promise<fabric.Object> {
+    return new Promise(resolve => {
+      const imageEl = document.createElement('img');
+      imageEl.addEventListener('load', () => {
+        const image = new fabric.Image(imageEl, {
+          evented: false,
+          selectable: false,
+          excludeFromExport: true,
+          flipX: this.side === 'back'
+        });
+        image.scaleToWidth(this.scale.W)
+        image.scaleToHeight(this.scale.H)
+        resolve(image);
+      })
+      imageEl.src = url;
+    });
   }
 
   private sliceImage(partData: TemplatePart) {

@@ -16,9 +16,10 @@
           "title": "Body",
           "thumbnail": "https://img.icons8.com/external-dreamstale-lineal-dreamstale/48/000000/external-cylinder-geometry-dreamstale-lineal-dreamstale.png",
           "width_2d": 3.24,
-          "height_2d": 2,
+          "height_2d": 1.61,
           "width_3d": 1,
           "height_3d": 1,
+          "folding_lines": "/folds/cylindrical-template-001-1.svg",
           "parts": [
             {
               "id": 1, "x": 0, "y": 0, "w": 3.14, "h": 1, "rT": 0.5, "rB": 0.3,

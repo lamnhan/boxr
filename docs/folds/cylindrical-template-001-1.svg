@@ -1,0 +1,12 @@
+<svg width="3240" height="1610" xmlns="http://www.w3.org/2000/svg">
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <line stroke-dasharray="5,5" stroke="#000" stroke-width="3" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="4.72928" x2="3.39786" y1="998.40501" x1="3.39786" fill="none"/>
+  <line stroke-dasharray="5,5" stroke="#000" stroke-width="3" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_3" y2="4.52887" x2="3140.18921" y1="998.40501" x1="3140.18921" fill="none"/>
+  <line stroke="#000" stroke-width="3" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_4" y2="3.5169" x2="3136.313" y1="3.5169" x1="4.00415" fill="none"/>
+  <line stroke="#000" stroke-width="3" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_5" y2="998.40501" x2="3140.40375" y1="998.40501" x1="3.09507" fill="none"/>
+  <ellipse stroke-dasharray="5,5" stroke="#000" stroke-width="3" ry="303.19374" rx="304.55738" id="svg_6" cy="1304.93302" cx="1569.8235" fill="none"/>
+  <path stroke-width="3" id="svg_8" d="m3139.89683,3.87138l95.99257,48.34971l-0.40399,898.8694l-94.4424,47.77674" opacity="NaN" stroke="#000" fill="none"/>
+ </g>
+
+</svg>

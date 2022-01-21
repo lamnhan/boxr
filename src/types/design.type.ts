@@ -22,6 +22,7 @@ export interface DesignData {
 export interface DesignBySide {
   showBackdrop: boolean;
   showNumbering: boolean;
+  showFolding: boolean;
   color: string;
   canvasJSON: string;
 }

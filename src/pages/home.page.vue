@@ -42,12 +42,14 @@ function editFromTemplate() {
         front: {
           showBackdrop: true,
           showNumbering: true,
+          showFolding: true,
           color: (activeColors.value as any)['front'],
           canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
         },
         back: {
           showBackdrop: true,
           showNumbering: true,
+          showFolding: true,
           color: (activeColors.value as any)['back'] || (activeColors.value as any)['front'],
           canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
         }

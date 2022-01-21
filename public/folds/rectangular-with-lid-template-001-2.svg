@@ -1,0 +1,17 @@
+<svg width="1200" height="1200" xmlns="http://www.w3.org/2000/svg">
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <line id="svg_2" y2="1197.85467" x2="97.82031" y1="2.18084" x1="97.82031" stroke-dasharray="5,5" stroke-width="3" stroke="#000" fill="none"/>
+  <line id="svg_3" y2="1203.23024" x2="1098.90685" y1="-4.34098" x1="1098.90685" stroke-dasharray="5,5" stroke-width="3" stroke="#000" fill="none"/>
+  <line id="svg_10" y2="4.37864" x2="1100.09045" y1="4.37864" x1="95.64637" stroke-width="3" stroke="#000" fill="none"/>
+  <line id="svg_11" y2="1197.87063" x2="1091.3315" y1="1197.87063" x1="102.16819" stroke-width="3" stroke="#000" fill="none"/>
+  <line id="svg_12" y2="1101.11845" x2="1097.83418" y1="1101.11845" x1="99.99425" stroke-dasharray="5,5" stroke-width="3" stroke="#000" fill="none"/>
+  <line id="svg_13" y2="103.32862" x2="1095.66025" y1="103.32862" x1="102.16819" stroke-dasharray="5,5" stroke-width="3" stroke="#000" fill="none"/>
+  <path id="svg_15" d="m96.7033,4.3956l-93.40659,9.89011l0,79.12088l94.50549,8.79121" opacity="NaN" stroke-width="3" stroke="#000" fill="none"/>
+  <path id="svg_16" d="m95.6044,103.2967l-93.40659,1.0989l1.0989,993.40659l94.50549,2.1978" opacity="NaN" stroke-width="3" stroke="#000" fill="none"/>
+  <path id="svg_17" d="m97.8022,1198.9011l-95.6044,-10.98902l0,-78.02198l93.40659,-9.89011" opacity="NaN" stroke-width="3" stroke="#000" fill="none"/>
+  <path id="svg_18" d="m1100,1197.8022l97.80219,-8.79121l-1.0989,-80.21978l-97.8022,-8.79121" opacity="NaN" stroke-width="3" stroke="#000" fill="none"/>
+  <path id="svg_19" d="m1101.0989,1098.9011l96.70329,1.0989l0,-995.60439l-97.8022,-1.0989" opacity="NaN" stroke-width="3" stroke="#000" fill="none"/>
+  <path id="svg_20" d="m1100,3.2967l98.90109,9.89011l-1.0989,80.21978l-97.8022,9.89011" opacity="NaN" stroke-width="3" stroke="#000" fill="none"/>
+ </g>
+</svg>

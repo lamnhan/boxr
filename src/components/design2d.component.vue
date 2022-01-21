@@ -96,6 +96,12 @@ function toggleNumbering(e: any) {
   emitDesignChanged({ showNumbering });
 }
 
+function toggleFolding(e: any) {
+  const showFolding = e.target.checked;
+  design2D.toggleFolding(showFolding);
+  emitDesignChanged({ showFolding });
+}
+
 function toggleSubmenu(name: string) {
   Object.keys(showSubmenu.value).forEach(key => {
     if (key === name) {
@@ -176,6 +182,10 @@ watch(unitId, () => {
               <label>
                 <span>Show part number</span>
                 <input type="checkbox" @change="toggleNumbering($event)" :checked="design.design_data[unitId][side].showNumbering">
+              </label>
+              <label>
+                <span>Show folding lines</span>
+                <input type="checkbox" @change="toggleFolding($event)" :checked="design.design_data[unitId][side].showFolding">
               </label>
             </div>
           </div>
