@@ -43,7 +43,7 @@
     "thickness": 0,
     "textures": {
       "front": {
-        "colors": ["#185ADB", "#34BE82", "#DA0037"]
+        "colors": ["#FEFEFE", "#333333", "#185ADB", "#34BE82", "#DA0037"]
       }
     }
   }

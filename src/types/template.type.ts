@@ -56,13 +56,10 @@ export interface Placement {
 export interface Clipping {
   x: number;
   y: number;
-  w: number;
-  h: number;
   p: string;
+  s?: Clipping[];
 }
 
 export type PlacementMode = 'closed' | 'opened';
 
-export type Geometry =
-  | 'unit' // coordinated placement only
-  | 'rectangle' | 'triangle' | 'circle' | 'cylinder' | 'heart'; // and more ...
+export type Geometry = 'rectangle' | 'circle' | 'cylinder' | 'triangle' | 'heart';

@@ -166,17 +166,32 @@ export class Design2D {
       // backdrop
       let clipPath: undefined | fabric.Path;
       if (c) {
-        const scaledWidth = this.scale.getPixels(c.w)
-        const scaledHeight = this.scale.getPixels(c.h)
-        clipPath = new fabric.Path(c.p, {
+        const {x: cX, y: cY, p: cP, s} = c;
+        // subtract path
+        let subtractPath: undefined | fabric.Group;
+        if (s) {
+          const subtractItems = s.map(item => {
+            const {x: sX, y: sY, p: sP} = item;
+            const subtractItem = new fabric.Path(sP, {
+              originX: 'center',
+              originY: 'center',
+              top: sY * 1000,
+              left: sX * 1000,
+            });
+            return subtractItem;
+          })
+          subtractPath = new fabric.Group(subtractItems, { inverted: true });
+        }
+        // clippath
+        clipPath = new fabric.Path(cP, {
           originX: 'center',
           originY: 'center',
-          top: c.y,
-          left: c.x,
-          flipX: this.side === 'back'
+          top: this.scale.getPixels(cY),
+          left: this.scale.getPixels(cX),
+          flipX: this.side === 'back',
+          clipPath: subtractPath
         });
-        clipPath.scaleToWidth(scaledWidth);
-        clipPath.scaleToHeight(scaledHeight);
+        clipPath.scaleToWidth(this.scale.getPixels((clipPath.width as number) / 1000), true);
       }
       const rect = new fabric.Rect({
         width,
