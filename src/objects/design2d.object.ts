@@ -19,8 +19,8 @@ export class Design2D {
   unit!: TemplateUnit;
   parts!: TemplatePart[];
 
-  backdropObjects: fabric.Object[] = [];
-  numberingObjects: fabric.Object[] = [];
+  backdropGroup!: fabric.Group;
+  numberingGroup!: fabric.Group;
   foldingObject?: fabric.Object;
 
   constructor() {}
@@ -62,9 +62,13 @@ export class Design2D {
     // render design
     return new Promise(resolve => {
       this.canvas.loadFromJSON(this.data.canvasJSON, () => {
+        // clip the canvas
+        this.canvas.clipPath = this.backdropGroup;
+        // show helpers
         if (this.silentCanvas || data.showBackdrop) this.toggleBackdrop()
         if (data.showNumbering) this.toggleNumbering()
         if (data.showFolding) this.toggleFolding()
+        // done
         resolve(this);
       })
     });
@@ -83,21 +87,17 @@ export class Design2D {
   toggleBackdrop(isShow = true) {
     this.skipChanged = true;
     this.data.showBackdrop = isShow;
-    this.backdropObjects.forEach(obj =>
-      isShow
-        ? this.canvas.add(obj).sendToBack(obj)
-        : this.canvas.remove(obj)
-    )
+    return isShow
+      ? this.canvas.add(this.backdropGroup).sendToBack(this.backdropGroup)
+      : this.canvas.remove(this.backdropGroup)
   }
 
   toggleNumbering(isShow = true) {
     this.skipChanged = true;
     this.data.showNumbering = isShow;
-    this.numberingObjects.forEach(obj =>
-        isShow
-          ? this.canvas.add(obj).bringToFront(obj)
-          : this.canvas.remove(obj)
-    )
+    return isShow
+      ? this.canvas.add(this.numberingGroup).bringToFront(this.numberingGroup)
+      : this.canvas.remove(this.numberingGroup)
   }
 
   toggleFolding(isShow = true) {
@@ -147,7 +147,7 @@ export class Design2D {
 
   private rearrangeHelpers() {
     if (this.data.showNumbering) {
-      this.numberingObjects.forEach(obj => this.canvas.bringToFront(obj))
+      this.canvas.bringToFront(this.numberingGroup)
     }
     if (this.data.showFolding && this.foldingObject) {
       this.canvas.bringToFront(this.foldingObject)
@@ -155,8 +155,8 @@ export class Design2D {
   }
 
   private async buildGlobalObjects() {
-    this.backdropObjects = [];
-    this.numberingObjects = [];
+    const backdropObjects: fabric.Object[] = [];
+    const numberingObjects: fabric.Object[] = [];
     this.parts.forEach(item => {
       const {id, x, y, w, h, c} = item;
       const width = this.scale.getPixels(w)
@@ -182,7 +182,7 @@ export class Design2D {
           })
           subtractPath = new fabric.Group(subtractItems, { inverted: true });
         }
-        // clippath
+        // clip path
         clipPath = new fabric.Path(cP, {
           originX: 'center',
           originY: 'center',
@@ -193,34 +193,43 @@ export class Design2D {
         });
         clipPath.scaleToWidth(this.scale.getPixels((clipPath.width as number) / 1000), true);
       }
-      const rect = new fabric.Rect({
-        width,
-        height,
-        top,
-        left,
-        fill: this.data.color,
-        clipPath,
-        evented: false,
-        selectable: false,
-        excludeFromExport: true
-      })
-      this.backdropObjects.push(rect)
-      // part numbering
-      const txt = new fabric.Text(
-        this.side === 'front' ? `${id}` : `-${id}`,
-        {
-          left: left + 5,
-          top: top + 5,
-          fontSize: 16,
-          fill: 'rgba(0, 0, 0, 0.5)',
-          evented: false,
-          selectable: false,
-          excludeFromExport: true
-        }
+      backdropObjects.push(
+        new fabric.Rect({
+          width,
+          height,
+          top,
+          left,
+          fill: this.data.color,
+          clipPath,
+        })
       )
-      this.numberingObjects.push(txt)
+      // numbering
+      numberingObjects.push(
+        new fabric.Text(
+          this.side === 'front' ? `${id}` : `-${id}`,
+          {
+            left: left + 5,
+            top: top + 5,
+            fontSize: 16,
+            fill: 'rgba(0, 0, 0, 0.5)',
+          }
+        )
+      )
     })
-    // folding
+    // backdrop group
+    this.backdropGroup = new fabric.Group(backdropObjects, {
+      absolutePositioned: true,
+      evented: false,
+      selectable: false,
+      excludeFromExport: true
+    })
+    // numbering group
+    this.numberingGroup = new fabric.Group(numberingObjects, {
+      evented: false,
+      selectable: false,
+      excludeFromExport: true
+    })
+    // folding object
     if (this.unit.folding_lines) {
       this.foldingObject = await this.createFoldingObject(this.unit.folding_lines)
     }

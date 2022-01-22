@@ -3,7 +3,7 @@
     "id": 4,
     "slug": "cylindrical-lid-template-001",
     "title": "Box 004",
-    "display_size": "R50 x R50 x H100 cm",
+    "display_size": "R500 x R500 x H1000 mm",
     "thumbnail": "/thumbnails/cylindrical-lid.png",
     "category_id": 4,
     "default_material_id": 3,

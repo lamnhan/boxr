@@ -3,7 +3,7 @@
     "id": 3,
     "slug": "cylindrical-template-001",
     "title": "Box 003",
-    "display_size": "R50 x R30 x H100 cm",
+    "display_size": "R500 x R300 x H1000 mm",
     "thumbnail": "/thumbnails/cylindrical.png",
     "category_id": 3,
     "default_material_id": 2,
