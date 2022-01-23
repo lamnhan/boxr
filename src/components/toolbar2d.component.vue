@@ -1,22 +1,25 @@
 <script lang="ts" setup>
-import {defineProps, watch} from 'vue';
+import {ref, defineProps, watch} from 'vue';
+
+import Toolbar2DGeneral from './toolbar2d-general.component.vue';
+import Toolbar2DText from './toolbar2d-text.component.vue';
 
 const props = defineProps<{ selection: any }>()
 
+const name = ref<string>('none')
+
 function onSelected() {
-  console.log(props.selection)
+  // TODO: handle aelection
 }
 
 watch(props, onSelected)
 </script>
 
 <template>
-  <ul>
-    <li>Item 1</li>
-    <li>Item 2</li>
-    <li>Item 3</li>
-  </ul>
+  <Toolbar2DGeneral></Toolbar2DGeneral>
+  <Toolbar2DText v-if="name==='text'"></Toolbar2DText>
 </template>
 
 <style lang="scss" scoped>
+
 </style>

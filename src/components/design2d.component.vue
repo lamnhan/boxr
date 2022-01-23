@@ -224,7 +224,7 @@ watch(unitId, () => {
   .toolbar {
     position: absolute;
     width: calc(100vw - 200px);
-    height: 45px;
+    height: 40px;
     top: 75px;
     left: 150px;
     background: #fff;
