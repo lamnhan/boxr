@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import {ref, computed, onMounted, watch} from 'vue'
 
+import Toolbar2d from './toolbar2d.component.vue';
+
 import {Design, EditingData, DesignSide} from '../types/design.type'
 import {TemplateUnit} from '../types/template.type';
 
@@ -14,9 +16,12 @@ import drySymbol from '../assets/dry.png';
 
 const sampleSymbols = [recycleSymbol, upSymbol, drySymbol];
 
+let design2D!: Design2D;
+
 // ref
 const side = ref<DesignSide>('front')
 const showSubmenu = ref<Record<string, boolean>>({})
+const canvasSelection = ref<any>();
 
 // computed
 const unitId = computed(() => store.state.editingUnitId)
@@ -25,9 +30,6 @@ const data = computed(() => store.state.editingData as EditingData)
 const lastSaved = computed(() => store.state.lastSaved || new Date(design.value.updated_at));
 const templateUnits = computed(() => data.value.template.spec.units)
 const currentUnit = computed(() => data.value.template.spec.units.find(item => item.id === unitId.value) as TemplateUnit)
-
-// canvas
-let design2D!: Design2D
 
 // helpers
 function emitDesignChanged(data: any) {
@@ -39,7 +41,8 @@ function emitDesignChanged(data: any) {
 function renderCanvas() {
   design2D = new Design2D()
     .setScale(currentUnit.value.width_2d, currentUnit.value.height_2d)
-    .renderCanvas('canvas-2d', (design2D: Design2D) => emitDesignChanged({ canvasJSON: JSON.stringify(design2D.toJSON()) }));
+    .renderCanvas('canvas-2d', (design2D: Design2D) => emitDesignChanged({ canvasJSON: JSON.stringify(design2D.toJSON()) }))
+    .onSelected(e => canvasSelection.value = e);
 }
 
 function renderDesign() {
@@ -124,6 +127,11 @@ watch(unitId, () => {
 </script>
 
 <template>
+  <div class="header">
+    <div class="toolbar">
+      <Toolbar2d :selection="canvasSelection"></Toolbar2d>
+    </div>
+  </div>
   <div class="main">
     <div class="left-tools">
       <section class="units">
@@ -206,11 +214,34 @@ watch(unitId, () => {
 
 <style lang="scss" scoped>
 
+.header {
+  z-index: 3;
+  position: relative;
+  width: 100vw;
+  height: 0;
+  padding-top: 75px;
+
+  .toolbar {
+    position: absolute;
+    width: calc(100vw - 200px);
+    height: 45px;
+    top: 75px;
+    left: 150px;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
 .main {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  padding-top: 75px;
 
   .left-tools {
     width: 149px;

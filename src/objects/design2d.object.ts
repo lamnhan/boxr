@@ -8,20 +8,24 @@ import {DesignBySide, DesignSide} from '../types/design.type';
 import {debounce} from '../helpers'
 import {Scale} from '../scale'
 
+type EventHandler = (e: any) => any;
+
 export class Design2D {
   scale!: Scale;
   canvas!: fabric.Canvas;
-  silentCanvas = false;
-  skipChanged = false;
-
+  
   side!: DesignSide;
   data!: DesignBySide;
   unit!: TemplateUnit;
   parts!: TemplatePart[];
-
+  
   backdropGroup!: fabric.Group;
   numberingGroup!: fabric.Group;
   foldingObject?: fabric.Object;
+  
+  silentCanvas = false;
+  skipChanged = false;
+  selectionHandlers: EventHandler[] = [];
 
   constructor() {}
 
@@ -50,6 +54,11 @@ export class Design2D {
 
   toJSON() {
     return this.canvas.toJSON();
+  }
+
+  onSelected(...handler: EventHandler[]) {
+    this.selectionHandlers.push(...handler);
+    return this as Design2D;
   }
 
   async renderDesign(side: DesignSide, data: DesignBySide, unit: TemplateUnit): Promise<Design2D> {
@@ -195,8 +204,8 @@ export class Design2D {
       }
       backdropObjects.push(
         new fabric.Rect({
-          width,
-          height,
+          width: width + 1,
+          height: height + 1,
           top,
           left,
           fill: this.data.color,
@@ -249,6 +258,11 @@ export class Design2D {
     this.canvas.on('object:added', () => onChanged(this))
     this.canvas.on('object:removed', () => onChanged(this))
     this.canvas.on('object:modified', () => onChanged(this))
+    // selection
+    const onSelected = (e: any) => this.selectionHandlers.forEach(handler => handler(e))
+    this.canvas.on('selection:created', e => onSelected(e));
+    this.canvas.on('selection:updated', e => onSelected(e));
+    this.canvas.on('selection:cleared', e => onSelected(e));
     // done
     return this as Design2D;
   }
@@ -272,10 +286,10 @@ export class Design2D {
   }
 
   private sliceImage(partData: TemplatePart) {
-    const top = this.scale.getPixels(partData.y);
-    const left = this.scale.getPixels(partData.x);
-    const width = this.scale.getPixels(partData.w);
-    const height = this.scale.getPixels(partData.h);
+    const top = this.scale.getPixels(partData.y) + 1;
+    const left = this.scale.getPixels(partData.x) + 1;
+    const width = this.scale.getPixels(partData.w) - 2;
+    const height = this.scale.getPixels(partData.h) - 2;
     return this.canvas.toDataURL({ format: 'png', top, left, width, height });
   }
 }
