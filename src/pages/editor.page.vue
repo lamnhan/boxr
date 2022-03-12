@@ -11,6 +11,7 @@ const unitId = computed(() => store.state.editingUnitId)
 const design = computed(() => store.state.editingDesign)
 const data = computed(() => store.state.editingData)
 
+const notFound = ref<boolean>(false)
 const mode = ref<'design' | 'preview'>('design')
 
 function goHome() {
@@ -21,39 +22,49 @@ store.dispatch(
   'loadEditing',
   +((router.currentRoute.value.params.iid as string).split('-').pop() as string)
 )
+.catch(() => notFound.value = true)
 </script>
 
 <template>
 
-  <div class="main" v-if="unitId && design && data">
+  <template v-if="!notFound">
 
-    <div class="header">
-      <div class="back">
-        <button @click="goHome()"><i class="icon icon-back"></i></button>
+    <div class="main" v-if="unitId && design && data">
+  
+      <div class="header">
+        <div class="back">
+          <button @click="goHome()"><i class="icon icon-back"></i></button>
+        </div>
+        <div class="info">
+          <h1 class="title">{{ design.title }}</h1>
+          <p>{{ data.template.display_size }}</p>
+        </div>
+        <div class="mode">
+          <button @click="mode = 'design'" :style="{background: mode === 'design' ? '#ddd' : '#fff'}">Design</button>
+          <button @click="mode = 'preview'" :style="{background: mode === 'preview' ? '#ddd' : '#fff'}">Preview</button>
+        </div>
+        <div class="purchasing">
+          <div class="price"><strong>{{ data.template.base_price - data.template.sale_off + data.material.offset_price }}</strong><em>₫</em></div>
+          <div class="action"><button>Purchase now</button></div>
+        </div>
       </div>
-      <div class="info">
-        <h1 class="title">{{ design.title }}</h1>
-        <p>{{ data.template.display_size }}</p>
+  
+      <div class="body">
+        <div class="design-view" :style="{zIndex: mode === 'design' ? 1 : -1}">
+          <Editor2D></Editor2D>
+        </div>
+        <div class="preview-view" :style="{zIndex: mode === 'preview' ? 1 : -1}">
+          <Preview3D></Preview3D>
+        </div>
       </div>
-      <div class="mode">
-        <button @click="mode = 'design'" :style="{background: mode === 'design' ? '#ddd' : '#fff'}">Design</button>
-        <button @click="mode = 'preview'" :style="{background: mode === 'preview' ? '#ddd' : '#fff'}">Preview</button>
-      </div>
-      <div class="purchasing">
-        <div class="price"><strong>{{ data.template.base_price - data.template.sale_off + data.material.offset_price }}</strong><em>₫</em></div>
-        <div class="action"><button>Purchase now</button></div>
-      </div>
+  
     </div>
 
-    <div class="body">
-      <div class="design-view" :style="{zIndex: mode === 'design' ? 1 : -1}">
-        <Editor2D></Editor2D>
-      </div>
-      <div class="preview-view" :style="{zIndex: mode === 'preview' ? 1 : -1}">
-        <Preview3D></Preview3D>
-      </div>
-    </div>
+  </template>
 
+  <div class="not-found" v-else>
+    <img src="https://img.icons8.com/external-prettycons-flat-prettycons/250/000000/external-404-web-and-seo-prettycons-flat-prettycons.png" alt="Design not found!">
+    <p>Sorry, this design is not available.</p>
   </div>
 
 </template>
@@ -192,6 +203,22 @@ store.dispatch(
         right: 0;
         bottom: 0;
       }
+    }
+  }
+
+  .not-found {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem 0;
+
+    p {
+      width: 100%;
+      margin-top: 2rem;
+      color: #333333;
+      font-size: 1.3rem;
+      text-align: center;
     }
   }
 </style>
