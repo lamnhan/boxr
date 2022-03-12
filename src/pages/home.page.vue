@@ -43,15 +43,15 @@ function editFromTemplate() {
       result[item.id] = {
         front: {
           showBackdrop: true,
-          showNumbering: true,
-          showFolding: true,
+          showNumbering: false,
+          showFolding: false,
           color: (activeColors.value as any)['front'],
           canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
         },
         back: {
           showBackdrop: true,
-          showNumbering: true,
-          showFolding: true,
+          showNumbering: false,
+          showFolding: false,
           color: (activeColors.value as any)['back'] || (activeColors.value as any)['front'],
           canvasJSON: JSON.stringify({version: '4.6.0', objects: []})
         }
