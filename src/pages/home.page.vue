@@ -3,6 +3,8 @@ import {ref, computed} from 'vue';
 import {ColorPicker} from 'vue-color-kit'
 import 'vue-color-kit/dist/vue-color-kit.css'
 
+import NewDesignSkeleton from '../components/new-design-skeleton.component.vue';
+
 import {Category} from '../types/category.type';
 import {Template} from '../types/template.type';
 import {Material, Texture} from '../types/material.type';
@@ -18,7 +20,7 @@ const colorPickerOptions = {
   isSucking: false,
 }
 
-const tab = ref('blank')
+const tab = ref('ready')
 const activeCategory = ref<null | Category>(null)
 const activeTemplate = ref<null | Template>(null)
 const activeMaterial = ref<null | Material>(null)
@@ -255,7 +257,12 @@ store.dispatch('loadCategoriesAndTemplates')
             </div>
 
             <div class="choose-a-design" v-else>
-              <p>TODO: ...</p>
+              <div class="new">
+                <NewDesignSkeleton @click="tab='blank'"></NewDesignSkeleton>
+              </div>
+              <div class="prebuilt">
+                TODO: ...
+              </div>
             </div>
 
           </div>
@@ -535,7 +542,21 @@ store.dispatch('loadCategoriesAndTemplates')
           }
         }
 
-        .choose-a-design {}
+        .choose-a-design {
+          display: flex;
+          flex-wrap: nowrap;
+          padding: 2rem 1rem 1rem;
+
+          .new {
+            padding-right: 1rem;
+            border-right: 1px solid #cccccc;
+          }
+
+          .prebuilt {
+            flex: 1;
+            padding-left: 1rem;
+          }
+        }
 
       }
     }
