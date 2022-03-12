@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+      (function () {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect != location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,8 +24,8 @@
         font-family: 'Poppins', sans-serif;
       }
     </style>
-    <script type="module" crossorigin src="/assets/index.2a084594.js"></script>
-    <link rel="modulepreload" href="/assets/vendor.51d93dd3.js">
+    <script type="module" crossorigin src="/assets/index.f80678e3.js"></script>
+    <link rel="modulepreload" href="/assets/vendor.4e629d9f.js">
   </head>
   <body>
     <div id="app"></div>
