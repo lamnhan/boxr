@@ -124,6 +124,7 @@ function changeColor(name: string, data: any) {
   customColors.value[name] = color;
 }
 
+store.dispatch('resetEditing')
 store.dispatch('loadCategoriesAndTemplates')
 </script>
 

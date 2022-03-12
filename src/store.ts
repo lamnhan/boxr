@@ -59,12 +59,16 @@ export const store = new Store({
       );
       return state.materialRecord[template.id];
     },
+    async resetEditing({state}) {
+      state.editingDesign = null;
+      state.editingData = null;
+    },
     async loadEditing({state}, designId: number) {
       // load design
       await (
         state.editingDesign && state.editingDesign.id === designId
           ? Promise.resolve()
-          : Promise.resolve() // get design from server
+          : Promise.resolve() // get design from server (or local)
       );
       // load data
       const category = state.categories.find(item => item.id === (state.editingDesign as Design).category_id) as Category;

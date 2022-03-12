@@ -13,6 +13,10 @@ const data = computed(() => store.state.editingData)
 
 const mode = ref<'design' | 'preview'>('design')
 
+function goHome() {
+  router.push({ name: 'home' })
+}
+
 store.dispatch(
   'loadEditing',
   +((router.currentRoute.value.params.iid as string).split('-').pop() as string)
@@ -24,6 +28,9 @@ store.dispatch(
   <div class="main" v-if="unitId && design && data">
 
     <div class="header">
+      <div class="back">
+        <button @click="goHome()"><i class="icon icon-back"></i></button>
+      </div>
       <div class="info">
         <h1 class="title">{{ design.title }}</h1>
         <p>{{ data.template.display_size }}</p>
@@ -69,7 +76,31 @@ store.dispatch(
       background: #ffffff;
       border-bottom: 1px solid #ccc;
 
+      .back {
+
+        button {
+          border: none;
+          background: none;
+          cursor: pointer;
+        }
+
+        .icon {
+          display: inline-block;
+          width: 32px;
+          height: 32px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: contain;
+          content: '';
+
+          &.icon-back {
+            background-image: url('https://icons.getbootstrap.com/assets/icons/arrow-left.svg');
+          }
+        }
+      }
+
       .info {
+        margin-left: 1rem;
 
         h1 {
           font-size: 1.2rem;
