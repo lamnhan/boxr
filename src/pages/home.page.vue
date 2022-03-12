@@ -131,7 +131,7 @@ store.dispatch('loadCategoriesAndTemplates')
 <template>
 
 <div class="header">
-  <h1>BOX-R</h1>
+  <h1>BOX:R</h1>
 </div>
 
 <div class="main">

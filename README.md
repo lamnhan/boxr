@@ -1,4 +1,4 @@
-# BOX-R
+# BOX:R
 
 A simple box editor using Vue & ThreeJS
 
