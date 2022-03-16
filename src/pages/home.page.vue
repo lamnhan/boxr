@@ -33,7 +33,7 @@ const materialRecord = computed(() => store.state.materialRecord)
 const templateRecord = computed(() => store.state.templateRecord)
 
 function editFromDesign(design: Design) {
-  router.push({ name: 'editor', params: {iid: `${design.slug}-${design.id}`} })
+  router.push({ name: 'editor', params: {id: design.id} })
 }
 
 function editFromTemplate() {

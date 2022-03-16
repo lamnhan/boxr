@@ -20,7 +20,7 @@ function goHome() {
 
 store.dispatch(
   'loadEditing',
-  +((router.currentRoute.value.params.iid as string).split('-').pop() as string)
+  +(router.currentRoute.value.params.id as string)
 )
 .catch(() => notFound.value = true)
 </script>
