@@ -8,9 +8,7 @@ const emits = defineEmits<{
 </script>
 
 <template>
-  <button @click="emits('click')">
-    <img src="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/75/000000/external-new-e-commerce-and-business-xnimrodx-lineal-xnimrodx.png"/>
-  </button>
+  <button @click="emits('click')">NEW</button>
 </template>
 
 <style lang="scss" scoped>
@@ -23,13 +21,10 @@ const emits = defineEmits<{
     width: 10rem;
     height: 15rem;
     cursor: pointer;
+    font-size: 1.5rem;
 
     &:hover {
       background: #f1f1f1;
-    }
-
-    img {
-      opacity: .5;
     }
   }
 
