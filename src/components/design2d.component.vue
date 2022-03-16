@@ -161,16 +161,16 @@ watch(unitId, () => {
     <div class="right-tools">
       <ul class="menu">
         <li class="text">
-          <button @click="addText()"><i class="icon icon-text"></i></button>
+          <button @click="addText()" title="Add text"><i class="icon icon-text"></i></button>
         </li>
         <li class="image">
-          <label>
+          <label title="Upload image">
             <i class="icon icon-image"></i>
             <input type="file" @change="uploadImage($event)" style="display:none;" />
           </label>
         </li>
         <li class="symbol">
-          <button  @click="toggleSubmenu('symbol')"><i class="icon icon-symbol"></i></button>
+          <button  @click="toggleSubmenu('symbol')" title="Add symbol"><i class="icon icon-symbol"></i></button>
           <div class="sub-menu" v-if="showSubmenu['symbol']">
             <div class="head">Add symbol</div>
             <div class="body">
@@ -179,7 +179,7 @@ watch(unitId, () => {
           </div>
         </li>
         <li class="view">
-          <button @click="toggleSubmenu('view')"><i class="icon icon-eye"></i></button>
+          <button @click="toggleSubmenu('view')" title="View options"><i class="icon icon-eye"></i></button>
           <div class="sub-menu" v-if="showSubmenu['view']">
             <div class="head">View options</div>
             <div class="body">
@@ -255,7 +255,7 @@ watch(unitId, () => {
         background: #f1f1f1;
         font-size: 14px;
         color: #333333;
-        padding: 5px 10px;
+        padding: 9px 10px;
         border-top: 1px solid #cccccc;
         border-bottom: 1px solid #cccccc;
       }

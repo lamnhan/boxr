@@ -1,14 +1,20 @@
 <script lang="ts" setup>
+function onClick() {
+  alert('TODO: implement me');
+}
 </script>
 
 <template>
   <ul>
-    <li><button><i class="icon icon-undo"></i></button></li>
-    <li><button><i class="icon icon-redo"></i></button></li>
+    <li><button title="Undo" @click="onClick()"><i class="icon icon-undo"></i></button></li>
+    <li><button title="Redo" @click="onClick()"><i class="icon icon-redo"></i></button></li>
     <li class="sep"></li>
-    <li><button><i class="icon icon-zoomout"></i></button></li>
-    <li><button><i class="icon icon-zoomin"></i></button></li>
+    <li><button title="Zoom out" @click="onClick()"><i class="icon icon-zoomout"></i></button></li>
+    <li><button title="Zoom in" @click="onClick()"><i class="icon icon-zoomin"></i></button></li>
     <li class="sep"></li>
+    <li>[A] [B] [C]</li>
+    <li class="sep"></li>
+    <li>[X] [Y] [Z]</li>
   </ul>
 </template>
 
