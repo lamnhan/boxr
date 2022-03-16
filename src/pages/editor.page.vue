@@ -18,6 +18,10 @@ function goHome() {
   router.push({ name: 'home' })
 }
 
+function goPurchase() {
+  alert('Hooray! You bought yourself some boxes!')
+}
+
 store.dispatch(
   'loadEditing',
   +(router.currentRoute.value.params.id as string)
@@ -45,7 +49,7 @@ store.dispatch(
         </div>
         <div class="purchasing">
           <div class="price"><strong>{{ data.template.base_price - data.template.sale_off + data.material.offset_price }}</strong><em>₫</em></div>
-          <div class="action"><button>Purchase now</button></div>
+          <div class="action"><button @click="goPurchase()">Purchase now</button></div>
         </div>
       </div>
   
